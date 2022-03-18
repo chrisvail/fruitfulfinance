@@ -1,5 +1,5 @@
 from ..distributions import Distribution
-from ..misc_functions import get_subscription_cost, get_plant_count
+from ..misc_functions import get_subscription_cost, get_plant_count, get_unit_cost
 
 class Client:
 
@@ -11,6 +11,12 @@ class Client:
     def __init__(self, unitCount, subLength, officePosition, churn, plant_dist, plant_request_length, plant_requests, revenue) -> None:
         self.unit_count = unitCount
         self.office_position = officePosition
+
+        self.revenue.make_payment(
+                    name=f"Client{self.id}",
+                    reason="sale",
+                    amount=get_unit_cost(self.unit_count)
+                )
 
         self.sub_length = subLength
         self.client_lifetime = 0
