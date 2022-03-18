@@ -3,35 +3,35 @@
     "systems": {
         "customerAcquisition":{
             "organic":{
-                "distribution":"gaussian",
+                "name":"gaussian",
                 "parameters":{
                     "mu":5,
                     "sigma":5
                 }
             },
             "advertising":{
-                "distribution":"gaussian",
+                "name":"gaussian",
                 "parameters":{
                     "mu":5,
                     "sigma":5
                 }
             },
             "events":{
-                "distribution":"gaussian",
+                "name":"gaussian",
                 "parameters":{
                     "mu":5,
                     "sigma":5
                 }
             },
-            "interested2active":{
-                "distribution":"gaussian",
+            "conversion":{
+                "name":"gaussian",
                 "parameters":{
                     "mu":5,
                     "sigma":5
                 }
             },
             "churn":{
-                "distribution":"gaussian",
+                "name":"gaussian",
                 "parameters":{
                     "mu":5,
                     "sigma":5

@@ -23,7 +23,8 @@ class Distribution:
         "logistic":stats.logistic,
         "lognorm":stats.lognorm,
         "chi2":stats.chi2,
-        "constant":Constant
+        "constant":Constant,
+        "binomial":stats.bernoulli
     }
 
     def __init__(self, name, parameters) -> None:
