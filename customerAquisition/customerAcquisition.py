@@ -12,7 +12,7 @@ class CustomerAcquisition:
         self.conversion = Distribution(**conversion)
         self.churn = Distribution(**churn)
 
-        self.interested_clients = 0
+        self.interested_clients = [0, 0, 0]
         self.active_clients = []
 
     def step(self, actions):
@@ -30,15 +30,15 @@ class CustomerAcquisition:
         # Convert interested clients
         conversion_rate = self.conversion.get_single()
         convert_dist = Distribution("bernoulli", {"p":conversion_rate})
-        converted_clients = sum(convert_dist.rvs(size=self.interested_clients))
+        converted_clients = sum(convert_dist.rvs(size=self.interested_clients.pop()))
         for i in range(converted_clients):
             self.active_clients.append(Client)
 
-        # Create new interested clients
-        self.interested_clients = sum([
+        # Create new interested clients and prepend them 
+        self.interested_clients = [sum([
             self.organic.get_single(),
             self.advertising.get_single(),
             self.events.get_single()
-        ])
+        ])] + self.interested_clients
 
 
