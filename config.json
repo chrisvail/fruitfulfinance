@@ -1,0 +1,42 @@
+{
+    "name":"Initial test run",
+    "systems": {
+        "customerAcquisition":{
+            "organic":{
+                "distribution":"gaussian",
+                "parameters":{
+                    "mu":5,
+                    "sigma":5
+                }
+            },
+            "advertising":{
+                "distribution":"gaussian",
+                "parameters":{
+                    "mu":5,
+                    "sigma":5
+                }
+            },
+            "events":{
+                "distribution":"gaussian",
+                "parameters":{
+                    "mu":5,
+                    "sigma":5
+                }
+            },
+            "interested2active":{
+                "distribution":"gaussian",
+                "parameters":{
+                    "mu":5,
+                    "sigma":5
+                }
+            },
+            "churn":{
+                "distribution":"gaussian",
+                "parameters":{
+                    "mu":5,
+                    "sigma":5
+                }
+            }
+        }
+    }
+}
