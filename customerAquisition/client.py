@@ -73,6 +73,7 @@ class Client:
                     }
                 )
                 return "continued"
+        return "in contract"
 
     def receive_plants(self, plants):
         # Ignore plants - not important

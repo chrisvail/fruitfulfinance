@@ -19,16 +19,6 @@ class CustomerAcquisition:
         
         # actions_rel = actions["marketing"]
 
-        # Prune active clients
-        client_mask = []
-        for client in self.active_clients:
-            if client.step_subscription() == "cancelled":
-                client_mask.append(False)
-            else:
-                client_mask.append(True)
-
-        self.active_clients = [client for client, mask in zip(self.active_clients, client_mask) if mask]
-
         # Convert interested clients
         conversion_rate = self.conversion.get_single()
         convert_dist = Distribution("bernoulli", {"p":conversion_rate})

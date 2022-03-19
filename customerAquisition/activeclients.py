@@ -34,6 +34,19 @@ class ActiveClients:
         self.revenue = revenue
 
 
+    def step(self, actions):
+        # Could log which clients are getting removed / what theyre all doing
+        # Prune active clients
+        client_mask = []
+        for client in self.clients:
+            if client.step_subscription() == "cancelled":
+                client_mask.append(False)
+            else:
+                client_mask.append(True)
+
+        self.clients = [client for client, mask in zip(self.active_clients, client_mask) if mask]
+
+
     def add_clients(self, client_count):
 
         for i in range(client_count):
