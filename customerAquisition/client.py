@@ -6,7 +6,9 @@ class Client:
     client_count = 0
     client_churned = 0
     expected_request_delay = 4
-    churn_min = 0.01
+    churn_addition = 0.025
+    churn_subtraction = 0.001
+    churn_min = 0.05
 
     def __init__(self, unitCount, subLength, officePosition, churn, plant_dist, plant_request_length, plant_requests, revenue) -> None:
         self.unit_count = unitCount
@@ -47,7 +49,11 @@ class Client:
 
            if self.churn.name == "binomial":
                 p = self.churn.parameters["p"]
-                p += 0.025
+                p += Client.churn_addition
+        else:
+            if self.churn.name == "binomial":
+                p = self.churn.parameters["p"]
+                p -= Client.churn_min
                 if p < Client.churn_min: p = Client.churn_min
 
         if self.client_lifetime % self.sub_length == 0:
