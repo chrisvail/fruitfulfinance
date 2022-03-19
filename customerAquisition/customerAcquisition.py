@@ -3,7 +3,7 @@ from .client import Client
 
 class CustomerAcquisition:
 
-    def __init__(self, organic, advertising, events, conversion, churn) -> None:
+    def __init__(self, activeClients, organic, advertising, events, conversion, churn) -> None:
 
         # Creating uncertainty distributions based on config file
         self.organic = Distribution(**organic)
@@ -13,7 +13,7 @@ class CustomerAcquisition:
         self.churn = Distribution(**churn)
 
         self.interested_clients = [0, 0, 0]
-        self.active_clients = []
+        self.active_clients = activeClients
 
     def step(self, actions):
         
@@ -33,8 +33,7 @@ class CustomerAcquisition:
         conversion_rate = self.conversion.get_single()
         convert_dist = Distribution("bernoulli", {"p":conversion_rate})
         converted_clients = sum(convert_dist.rvs(size=self.interested_clients.pop()))
-        for i in range(converted_clients):
-            self.active_clients.append(Client)
+        self.active_clients.add_clients(converted_clients)
 
         # Create new interested clients and prepend them 
         self.interested_clients = [sum([
