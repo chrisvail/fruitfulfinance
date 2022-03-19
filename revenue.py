@@ -1,12 +1,49 @@
-
+from logging import getLogger, INFO
+from queue import Queue
 
 class Revenue:
     """ All revenue generating activities go through here. 
         Basically clients make calls to this object when renewing subscriptions and 
         buying units. Keeps track of all the revenue generated, at what time"""
-    def __init__(self) -> None:
-        pass
+    
+
+    def __init__(self, build_q: Queue, maintenance_q: Queue) -> None:
+        self.payments = {
+            "total":0,
+            "sale":0,
+            "subscription":0,
+            "transactions":0
+        }
+        self.logger = getLogger(__name__)
+
+        self.step = 0
+        self.record = []
+
+        self.build_q = build_q
+        self.maintenance_q = maintenance_q
+
+    def step(self, actions):
+        self.record.append(self.payments)
+        self.zero_payments()
+        self.step += 1
 
 
-    def make_payment(self, name, tag, amount):
-        pass
+    def make_payment(self, name, tag, amount, details):
+        self.payments["total"] += amount
+        self.payments[tag] += amount
+        self.payments["transactions"] += 1
+        
+        self.logger.log(INFO, f'{{"name":"{name}", "tag":"{tag}", "amount":{amount}, "details":{details}}}')
+
+        if tag == "sale":
+            self.build_q.put(details)
+        elif tag == "subscription":
+            self.maintenance_q.put(details)
+
+    def zero_payments(self):
+        self.payments = {
+            "total":0,
+            "sale":0,
+            "subscription":0,
+            "transactions":0
+        }

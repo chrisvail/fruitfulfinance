@@ -17,6 +17,8 @@ class CustomerAcquisition:
 
     def step(self, actions):
         
+        # actions_rel = actions["marketing"]
+
         # Prune active clients
         client_mask = []
         for client in self.active_clients:

@@ -17,7 +17,11 @@ class Client:
         self.revenue.make_payment(
                     name=f"Client{self.id}",
                     reason="sale",
-                    amount=get_unit_cost(self.unit_count)
+                    amount=get_unit_cost(self.unit_count),
+                    details={
+                        "units":unitCount,
+                        "client":self,
+                    }
                 )
 
         self.sub_length = subLength
@@ -27,7 +31,7 @@ class Client:
         self.plant_dist = Distribution(**plant_dist)
         self.plant_request_length = plant_request_length
         self.plant_request = plant_requests
-        self.plant_request.make_request(self.plant_dist.get_array(get_plant_count(self.unit_count)))
+        self.plant_request.make_request(self.plant_dist.get_array(get_plant_count(self.unit_count)), self)
         self.plants_requested = None
         
 
@@ -41,7 +45,7 @@ class Client:
     def step_subscription(self):
         self.client_lifetime += 1
         if self.client_lifetime % self.plant_request_length == 0:
-            self.plant_request.make_request(self.plant_dist.get_array(get_plant_count(self.unit_count)))
+            self.plant_request.make_request(self.plant_dist.get_array(get_plant_count(self.unit_count)), self)
             self.plants_requested = self.client_lifetime
         
         if self.plants_requested is not None \
@@ -63,7 +67,10 @@ class Client:
                 self.revenue.make_payment(
                     name=f"Client{self.id}",
                     reason="subscription",
-                    amount=self.subscription_cost
+                    amount=self.subscription_cost,
+                    details={
+                        "client":self
+                    }
                 )
                 return "continued"
 
