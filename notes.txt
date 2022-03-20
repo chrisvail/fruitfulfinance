@@ -14,3 +14,18 @@ Revenue:
         finally expenses
     - Logging every transaction might create a hell of a lot of text
     - How is best to report expenses? Keep a record or quote them as they happen?
+
+
+Order of Stepping:
+    1. activeClients
+    2. CustomerAcquisition
+    3. Revenue
+    4. Germination
+    5. Building
+    6. Maintenance
+    7. Expenses
+
+
+TODO:
+    - Create factory for customer acquisition pipeline
+    - Create config file for customer acquisition pipeline

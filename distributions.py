@@ -21,6 +21,19 @@ class Timer:
         steps -= 1
         return np.ones((size, ))*(self.steps <= 0)
 
+
+class DiscreteBeta:
+    """ Takes a beta distribution and descretises it. Allows for 
+        plant requests to have different distributions """
+    def __init__(self, alpha, beta, buckets) -> None:
+        self.dist = stats.beta(alpha, beta)
+        self.buckets = buckets
+    
+    def rvs(self, size):
+        array = self.dist.rvs(size)
+        np.fix(array*self.buckets).astype("int32")
+        return array
+
 class Distribution:
 
     _distributions = {
