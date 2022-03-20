@@ -33,7 +33,7 @@ class Revenue:
         self.payments[tag] += amount
         self.payments["transactions"] += 1
         
-        self.logger.log(INFO, f'{{"name":"{name}", "tag":"{tag}", "amount":{amount}, "details":{details}}}')
+        self.logger.log(INFO, f'REVENUE:{{"name":"{name}", "tag":"{tag}", "amount":{amount}, "details":{details}}}')
 
         if tag == "sale":
             self.build_q.put(details)

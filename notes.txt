@@ -37,6 +37,11 @@ Order of Stepping:
     7. Expenses
 
 
+Messaging Queues:
+    - build_q
+    - maintenance_q
+    - install_q
+
 TODO:
     - Create factory for customer acquisition pipeline
     - Create config file for customer acquisition pipeline

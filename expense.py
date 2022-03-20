@@ -1,7 +1,7 @@
 from logging import getLogger, INFO
 from queue import Queue
 
-class Revenue:
+class Expense:
     """ All expense generating activities go through here. 
         Whenever we pay for anything it goes through here"""
     
@@ -27,12 +27,12 @@ class Revenue:
         self.step += 1
 
 
-    def make_payment(self, name, tag, amount, details):
+    def make_payment(self, name, tag, amount, details={}):
         self.payments["total"] += amount
         self.payments[tag] += amount
         self.payments["transactions"] += 1
         
-        self.logger.log(INFO, f'{{"name":"{name}", "tag":"{tag}", "amount":{amount}, "details":{details}}}')
+        self.logger.log(INFO, f'EXPENSE:{{"name":"{name}", "tag":"{tag}", "amount":{amount}, "details":{details}}}')
 
 
     def zero_payments(self):
