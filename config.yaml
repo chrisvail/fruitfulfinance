@@ -1,31 +1,52 @@
 ---
 name: "Initial test run"
+consts:
+  sub_price: 40
+  pur_price: 500
+  germination_rate: 0.5
+  fuel_cpm: 0.22
+  man_cost: [[63.53, 47.88, 41.90], 31.76]
+  mat_cost: [[203.68, 169.01, 146.58], 105.86]
+  reman_cost: [[87.10, 48.36, 42.70], 24.70]
 systems:
   customerAcquisition:
     organic:
       name: "gaussian"
       parameters:
-        mu: 5
-        sigma: 5
+        loc: 1
+        scale: 0.5
     advertising:
       name: "gaussian"
       parameters:
-        mu: 5
-        sigma: 5
+        loc: 20
+        scale: 5
     events:
       name: "gaussian"
       parameters:
-        mu: 5
-        sigma: 5
+        loc: 50
+        scale: 10
     conversion:
       name: "gaussian"
       parameters:
-        mu: 5
-        sigma: 5
+        loc: 0.4
+        scale: 0.2
     churn:
       name: "gaussian"
       parameters:
-        mu: 5
-        sigma: 5
-...
----
+        loc: 1
+        scale: 0.2
+    unit:
+      name: "skew-norm"
+      parameters:
+        a: -4
+        loc: 6
+        scale: 2
+    subLength:
+      name: "timer"
+      parameters:
+        steps: 12
+    officePosition:
+      name: "gaussian"
+      parameters:
+        loc: 5
+        scale: 3
