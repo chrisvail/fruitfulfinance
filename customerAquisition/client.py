@@ -33,6 +33,8 @@ class Client:
         self.plant_request = plant_requests
         self.plant_request.make_request(self.plant_dist.get_array(get_plant_count(self.unit_count)), self)
         self.plants_requested = None
+
+        self.installed = False
         
 
         self.id = Client.client_count
@@ -43,6 +45,9 @@ class Client:
 
     
     def step_subscription(self):
+
+        if not self.installed: return "uninstalled"
+
         self.client_lifetime += 1
         if self.client_lifetime % self.plant_request_length == 0:
             self.plant_request.make_request(self.plant_dist.get_array(get_plant_count(self.unit_count)), self)
