@@ -53,12 +53,12 @@ class ActiveClients:
 
         cac = self.select_cac(client_count)
         self.expense.make_payment(
-            reason="Customer Acquisition",
+            name="Customer Acquisition",
+            tag="Customer Acquisition",
             amount=cac*client_count,
         )
 
         for i in range(client_count):
-
             unitCount = int(self.unit_distribution_dist.get_single())
             subLength = int(self.subLength_dist.get_single())
             officePosition = self.office_position_dist.get_array(size=2)

@@ -16,7 +16,7 @@ class Client:
 
         self.revenue.make_payment(
                     name=f"Client{self.id}",
-                    reason="sale",
+                    tag="sale",
                     amount=get_unit_cost(self.unit_count),
                     details={
                         "units":unitCount,
@@ -71,7 +71,7 @@ class Client:
             else:
                 self.revenue.make_payment(
                     name=f"Client{self.id}",
-                    reason="subscription",
+                    tag="subscription",
                     amount=self.subscription_cost,
                     details={
                         "client":self
