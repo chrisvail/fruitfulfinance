@@ -3,12 +3,10 @@ from .client import Client
 
 class CustomerAcquisition:
 
-    def __init__(self, activeClients, organic, advertising, events, conversion, churn) -> None:
+    def __init__(self, activeClients, lead_generation, conversion, churn) -> None:
 
         # Creating uncertainty distributions based on config file
-        self.organic = Distribution(**organic)
-        self.advertising = Distribution(**advertising)
-        self.events = Distribution(**events)
+        self.lead_generation = Distribution(**lead_generation)
         self.conversion = Distribution(**conversion)
         self.churn = Distribution(**churn)
 
@@ -26,10 +24,6 @@ class CustomerAcquisition:
         self.active_clients.add_clients(converted_clients)
 
         # Create new interested clients and prepend them 
-        self.interested_clients = [sum([
-            self.organic.get_single(),
-            self.advertising.get_single(),
-            self.events.get_single()
-        ])] + self.interested_clients
+        self.interested_clients = [self.lead_generation.get_single()] + self.interested_clients
 
 

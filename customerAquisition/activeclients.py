@@ -3,7 +3,7 @@ from ..distributions import Distribution
 
 class ActiveClients:
 
-    def __init__(self, distributions, plant_requester, revenue, plant_request_length) -> None:
+    def __init__(self, distributions, plant_requester, plant_request_length, revenue, expense, cac) -> None:
         self.clients = []
 
         # Creation of clients
@@ -32,6 +32,8 @@ class ActiveClients:
         self.plant_requester = plant_requester 
         self.plant_request_length = plant_request_length
         self.revenue = revenue
+        self.expense = expense
+        self.cac = cac
 
 
     def step(self, actions):
@@ -49,6 +51,12 @@ class ActiveClients:
 
     def add_clients(self, client_count):
 
+        cac = self.select_cac(client_count)
+        self.expense.make_payment(
+            reason="Customer Acquisition",
+            amount=cac*client_count,
+        )
+
         for i in range(client_count):
 
             unitCount = int(self.unit_distribution_dist.get_single())
@@ -59,3 +67,18 @@ class ActiveClients:
                 unitCount, subLength, officePosition, self.churn_base, self.plant_base, 
                 self.plant_request_length, self.plant_requester, self.revenue
             ))
+
+    def select_cac(self, customers):
+        # Threshold
+        # Value
+
+        # self.cac = {
+        #   "thresholds":[5, 10, 25],
+        #   "values":[210, 120, 90]
+        # }
+
+        for i, threshold in enumerate(self.cac["thresholds"]):
+            if customers > threshold:
+                continue
+            else:
+                return self.cac["values"][i]

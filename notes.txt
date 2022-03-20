@@ -40,3 +40,4 @@ Order of Stepping:
 TODO:
     - Create factory for customer acquisition pipeline
     - Create config file for customer acquisition pipeline
+    - How do we go from phase one to two
