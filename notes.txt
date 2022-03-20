@@ -7,6 +7,11 @@ CustomerAcquisition:
     - Is a binomial distribution with a sampled probability the correct way to 
         generate new active customers? Should this just be a simple percentage?
     - How do we best create the JSON / YAML for these distributions
+    - Change organic, ads and events to lead_generation
+    - lead_generation step on update as constant (distribution)
+
+activeClients:
+    - Add customer acquisition cost expense
 
 Revenue:
     - Important to remember order of subscriptions to the clock. Should do clients first
@@ -15,6 +20,12 @@ Revenue:
     - Logging every transaction might create a hell of a lot of text
     - How is best to report expenses? Keep a record or quote them as they happen?
 
+
+Constants:
+    - Materials
+    - Labour costs
+    - Prices: sale & subscriptions
+    - Plants per unit
 
 Order of Stepping:
     1. activeClients

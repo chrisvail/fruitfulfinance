@@ -4,8 +4,8 @@ import numpy as np
 
 class Constant:
     """ Returns a constant value always """
-    def __init__(self, value) -> None:
-        self.value = value
+    def __init__(self, loc) -> None:
+        self.value = loc
 
     def rvs(self, size):
         return np.ones((size, ))*self.value
