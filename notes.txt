@@ -31,9 +31,9 @@ Order of Stepping:
     1. activeClients
     2. CustomerAcquisition
     3. Revenue
-    4. Germination
-    5. Building
-    6. Maintenance
+    4. Building
+    5. Maintenance
+    6. Germination
     7. Expenses
 
 

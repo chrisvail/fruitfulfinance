@@ -10,6 +10,18 @@ consts:
   reman_cost: [[87.10, 48.36, 42.70], 24.70]
   plants_per_unit: 30
   capex: [[1673.53, 210.93, 151.93], 928.66]
+  germination_costs:
+    cost_per_seed: 0.11471
+    seeds_per_shelf: 400
+    new_shelf_capex: 108.6
+    shelf_running_cost: 1.03488
+    new_shelving_unit_capex: 55
+    shelves_per_shelving_unit: 6
+    extra_production: 5
+  plant_maturity:
+    weeks2mature: 3
+    mature_life: 2
+  initial_shelf_counts: [3, 18]
 systems:
   customerAcquisition:
     leadGen:
