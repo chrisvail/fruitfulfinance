@@ -51,6 +51,7 @@ class ActiveClients:
 
     def add_clients(self, client_count):
 
+        # Add acquisition cost for customers
         cac = self.select_cac(client_count)
         self.expense.make_payment(
             name="Customer Acquisition",

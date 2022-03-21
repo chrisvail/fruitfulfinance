@@ -6,21 +6,33 @@ from ..expense import Expense
 
 class InstallUnits:
 
-    def __init__(self, transport: Transport, install_q: Queue[list[Client]], install_cost, expense: Expense) -> None:
+    def __init__(self, transport: Transport, install_q: Queue[list[Client]], install_cost, expense: Expense, plant_store) -> None:
         self.transport = transport
         self.install_q = install_q
         self.install_cost = install_cost
+        self.delayed_installs = []
 
         self.expense = expense
+        self.plant_store = plant_store
 
     def step(self, actions):
+        # installs = self.delayed_installs + self.install_q.get()
         installs = self.install_q.get()
+        self.delayed_installs = []
 
         for client in installs:
-            client.installed = True
             fuel_cost = self.transport.make_single_journey(client.office_position)
-            self.expense.make_payment(
-                name=f"Client{client.id}-Install",
-                tag="build",
-                amount=fuel_cost + self.install_cost,
-            )
+            plants = self.plant_store.get_plants(client.plant_varieties_requested)
+            
+            if plants is not None:
+                client.installed = True
+                self.expense.make_payment(
+                    name=f"Client{client.id}-Install",
+                    tag="build",
+                    amount=fuel_cost + self.install_cost,
+                )
+                client.receive_plants(plants)
+            else:
+                self.delayed_installs.append(client)
+
+            

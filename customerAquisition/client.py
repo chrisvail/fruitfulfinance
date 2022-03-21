@@ -10,9 +10,21 @@ class Client:
     churn_subtraction = 0.001
     churn_min = 0.05
 
-    def __init__(self, unitCount, subLength, officePosition, churn, plant_dist, plant_request_length, plant_requests, revenue) -> None:
+    def __init__(self, unitCount, subLength, officePosition, churn, plant_dist, plant_request_length, germination_request, revenue) -> None:
         self.unit_count = unitCount
         self.office_position = officePosition
+
+
+        self.sub_length = subLength
+        self.client_lifetime = 0
+
+        self.churn = Distribution(**churn)
+        self.plant_dist = Distribution(**plant_dist)
+        self.plant_request_length = plant_request_length
+        self.germination_request = germination_request
+        self.plant_varieties_requested = self.plant_dist.get_array(size=get_plant_count(self.unit_count))
+        self.germination_request.make_request(self.plant_varieties_requested)
+        self.plants_requested = None
 
         self.revenue.make_payment(
                     name=f"Client{self.id}",
@@ -23,16 +35,6 @@ class Client:
                         "client":self,
                     }
                 )
-
-        self.sub_length = subLength
-        self.client_lifetime = 0
-
-        self.churn = Distribution(**churn)
-        self.plant_dist = Distribution(**plant_dist)
-        self.plant_request_length = plant_request_length
-        self.plant_request = plant_requests
-        self.plant_request.make_request(self.plant_dist.get_array(get_plant_count(self.unit_count)), self)
-        self.plants_requested = None
 
         self.installed = False
         
@@ -50,7 +52,8 @@ class Client:
 
         self.client_lifetime += 1
         if self.client_lifetime % self.plant_request_length == 0:
-            self.plant_request.make_request(self.plant_dist.get_array(get_plant_count(self.unit_count)), self)
+            self.plant_varieties_requested = self.plant_dist.get_array(get_plant_count(self.unit_count))
+            self.germination_request.make_request()
             self.plants_requested = self.client_lifetime
         
         if self.plants_requested is not None \
@@ -83,5 +86,6 @@ class Client:
     def receive_plants(self, plants):
         # Ignore plants - not important
         self.plants_requested = None
+        self.plant_varieties_requested = None
         
         
