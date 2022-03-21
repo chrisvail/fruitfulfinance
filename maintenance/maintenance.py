@@ -26,7 +26,8 @@ class Maintenance:
         for client in self.delayed_clients:
             self.maintenance_q.put({"client":client})
 
-        self.transport.make_combined_jouney(self.client_list)
+
+        self.transport.make_combined_jouney(self.client_list, plot_name=action["plot_maintenance"])
         
         self.client_list = []
         self.delayed_clients = []
