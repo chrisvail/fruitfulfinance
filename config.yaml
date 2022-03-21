@@ -1,31 +1,60 @@
 ---
 name: "Initial test run"
+consts:
+  sub_price: 40
+  pur_price: 500
+  germination_rate: 0.5
+  fuel_cpm: 0.22
+  man_cost: [[63.53, 47.88, 41.90], 31.76]
+  mat_cost: [[203.68, 169.01, 146.58], 105.86]
+  reman_cost: [[87.10, 48.36, 42.70], 24.70]
+  plants_per_unit: 30
+  capex: [[1673.53, 210.93, 151.93], 928.66]
 systems:
   customerAcquisition:
-    organic:
-      name: "gaussian"
+    leadGen:
+      name: "skew-norm"
       parameters:
-        mu: 5
-        sigma: 5
-    advertising:
-      name: "gaussian"
-      parameters:
-        mu: 5
-        sigma: 5
-    events:
-      name: "gaussian"
-      parameters:
-        mu: 5
-        sigma: 5
+        a: -4
+        loc: 20
+        scale: 5
     conversion:
       name: "gaussian"
       parameters:
-        mu: 5
-        sigma: 5
+        loc: 0.07
+        scale: 0.1
     churn:
+      name: "binomial"
+      parameters:
+        p: 0.0833
+    cac_low:
       name: "gaussian"
       parameters:
-        mu: 5
-        sigma: 5
-...
----
+        loc: 212.53
+        scale: 20
+    cac_med:
+      name: "gaussian"
+      parameters:
+        loc: 118.40
+        scale: 15
+    cac_high:
+      name: "gaussian"
+      parameters:
+        loc: 89.97
+        scale: 10
+  activeClients:
+    unit:
+      name: "skew-norm"
+      parameters:
+        a: -4
+        loc: 6
+        scale: 2
+    subLength:
+      name: "timer"
+      parameters:
+        steps: 12
+    officePosition:
+      name: "gaussian"
+      parameters:
+        loc: 5
+        scale: 2.5
