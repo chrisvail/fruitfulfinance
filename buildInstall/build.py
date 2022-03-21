@@ -54,6 +54,7 @@ class BuildUnit:
         client_list = [x["client"] for x in builds]
         self.install_q.put(client_list)
 
+        self.phase = actions["phase"]
 
     def get_threshold(self, units):
 
