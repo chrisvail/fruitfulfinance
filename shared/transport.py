@@ -1,7 +1,6 @@
-
-
 import numpy as np
 
+from ..customerAquisition.client import Client
 
 class Transport:
     
@@ -17,6 +16,6 @@ class Transport:
         distance_travelled = np.sum(np.abs(self.hq_position - location))
         return distance_travelled*self.fuel_cost
 
-    def make_combined_jouney(self, locations):
+    def make_combined_jouney(self, clients: list[Client]):
         # Make multiple journeys
         pass

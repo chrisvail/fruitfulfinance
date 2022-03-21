@@ -22,6 +22,7 @@ consts:
     weeks2mature: 3
     mature_life: 2
   initial_shelf_counts: [3, 18]
+  maintenance_cost: 7.038
 systems:
   customerAcquisition:
     leadGen:

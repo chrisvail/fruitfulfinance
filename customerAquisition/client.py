@@ -53,7 +53,7 @@ class Client:
         self.client_lifetime += 1
         if self.client_lifetime % self.plant_request_length == 0:
             self.plant_varieties_requested = self.plant_dist.get_array(get_plant_count(self.unit_count))
-            self.germination_request.make_request()
+            self.germination_request.make_request(self.plant_varieties_requested)
             self.plants_requested = self.client_lifetime
         
         if self.plants_requested is not None \
