@@ -12,8 +12,10 @@ class BuildUnit:
         self.build_q = build_q
         self.expense = expense
         
-        self.install_delay = [0, 0]
         self.install_q = install_q
+        # Add delay of 2 weeks
+        self.install_q.put([])
+        self.install_q.put([])
 
         self.phase = phase
 
@@ -49,9 +51,8 @@ class BuildUnit:
         )
 
         # Takes 2 weeks to build and prep for install
-        self.install_q.put(self.install_delay.pop(0))
         client_list = [x["client"] for x in builds]
-        self.install_delay.append(client_list)
+        self.install_q.put(client_list)
 
 
     def get_threshold(self, units):
