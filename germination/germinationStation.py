@@ -126,6 +126,27 @@ class GerminationStation:
         plant_counts = [plants.count(i) for i, _ in enumerate(GerminationStation.plant_varieties)]
         self.plant_requests = [a + b for a, b in zip(self.plant_requests, plant_counts)]
 
+    def get_plants(self, request):
+        request_grouped = [request.count(i) for i, _ in enumerate(GerminationStation.plant_varieties)]
+        difference = [a - b for a, b in zip(self.mature_plants, request_grouped)]
+        # Can provide all requested plants
+        if all([x >= 0 for x in difference]):
+            self._remove_plants(request_grouped)
+            return request
+        else:
+            return None
+
+    def _remove_plants(self, request_grouped):
+        for variety, count in enumerate(request_grouped):
+            for i in range(self.mature_life):
+                if count > self.plant_store[variety][i]:
+                    count -= self.plant_store[variety][i]
+                    self.plant_store[variety][i] = 0
+                else:
+                    self.plant_store[variety][i] -= count
+                    count = 0
+                    break
+
     @property 
     def total_plant_space(self):
         return self.shelf_count*self.seeds_per_shelf
