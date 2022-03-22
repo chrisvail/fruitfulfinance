@@ -3,7 +3,8 @@ from distributions import Distribution
 
 class ActiveClients:
 
-    def __init__(self, distributions, plant_requester, plant_request_length, revenue, expense, cac) -> None:
+    def __init__(self, distributions, plant_requester, plant_request_length, 
+                 revenue, expense, cac, client_details) -> None:
         self.clients = []
 
         # Creation of clients
@@ -31,6 +32,7 @@ class ActiveClients:
 
         self.plant_requester = plant_requester 
         self.plant_request_length = plant_request_length
+        self.client_details = client_details
         self.revenue = revenue
         self.expense = expense
         self.cac = cac
@@ -66,7 +68,7 @@ class ActiveClients:
 
             self.clients.append(Client(
                 unitCount, subLength, officePosition, self.churn_base, self.plant_base, 
-                self.plant_request_length, self.plant_requester, self.revenue
+                self.plant_request_length, self.plant_requester, self.revenue, self.client_details
             ))
 
     def select_cac(self, customers):

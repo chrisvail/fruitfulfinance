@@ -1,5 +1,4 @@
 from distributions import Distribution
-from misc_functions import get_subscription_cost, get_plant_count, get_unit_cost
 
 class Client:
 
@@ -10,7 +9,7 @@ class Client:
     churn_subtraction = 0.001
     churn_min = 0.05
 
-    def __init__(self, unitCount, subLength, officePosition, churn, plant_dist, plant_request_length, germination_request, revenue) -> None:
+    def __init__(self, unitCount, subLength, officePosition, churn, plant_dist, plant_request_length, germination_request, revenue, client_details) -> None:
         self.unit_count = unitCount
         self.office_position = officePosition
 
@@ -22,14 +21,18 @@ class Client:
         self.plant_dist = Distribution(**plant_dist)
         self.plant_request_length = plant_request_length
         self.germination_request = germination_request
-        self.plant_varieties_requested = self.plant_dist.get_array(size=get_plant_count(self.unit_count))
+        self.plant_varieties_requested = self.plant_dist.get_array(size=self.plants_per_unit*self.unit_count)
         self.germination_request.make_request(self.plant_varieties_requested)
         self.plants_requested = None
+
+        self.purchase_price = client_details["purchase_price"]
+        self.subscription_price = client_details["subscription_price"]
+        self.plants_per_unit = client_details["plants_per_unit"]
 
         self.revenue.make_payment(
                     name=f"Client{self.id}",
                     tag="sale",
-                    amount=get_unit_cost(self.unit_count),
+                    amount=self.purchase_price*self.unit_count,
                     details={
                         "units":unitCount,
                         "client":self,
@@ -42,7 +45,6 @@ class Client:
         self.id = Client.client_count
         Client.client_count += 1
 
-        self.subscription_cost = get_subscription_cost(self.unit_count)
         self.revenue = revenue
 
     
@@ -52,7 +54,7 @@ class Client:
 
         self.client_lifetime += 1
         if self.client_lifetime % self.plant_request_length == 0:
-            self.plant_varieties_requested = self.plant_dist.get_array(get_plant_count(self.unit_count))
+            self.plant_varieties_requested = self.plant_dist.get_array(size=self.plants_per_unit*self.unit_count)
             self.germination_request.make_request(self.plant_varieties_requested)
             self.plants_requested = self.client_lifetime
         
@@ -75,7 +77,7 @@ class Client:
                 self.revenue.make_payment(
                     name=f"Client{self.id}",
                     tag="subscription",
-                    amount=self.subscription_cost,
+                    amount=self.subscription_price*self.unit_count,
                     details={
                         "client":self
                     }
