@@ -49,7 +49,8 @@ class Distribution:
         "chi2":stats.chi2,
         "constant":Constant,
         "binomial":stats.bernoulli,
-        "timer":Timer
+        "timer":Timer,
+        "discreteBeta":DiscreteBeta
     }
 
     def __init__(self, name, parameters) -> None:

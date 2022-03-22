@@ -3,12 +3,11 @@ from .client import Client
 
 class CustomerAcquisition:
 
-    def __init__(self, activeClients, lead_generation, conversion, churn) -> None:
+    def __init__(self, activeClients, lead_generation, conversion) -> None:
 
         # Creating uncertainty distributions based on config file
         self.lead_generation = Distribution(**lead_generation)
         self.conversion = Distribution(**conversion)
-        self.churn = Distribution(**churn)
 
         self.interested_clients = [0, 0, 0]
         self.active_clients = activeClients

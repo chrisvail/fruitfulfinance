@@ -3,11 +3,12 @@ from matplotlib import pyplot as plt
 from scipy import rand
 
 from customerAquisition.client import Client
+from distributions import Distribution
 
 class Transport:
     
     def __init__(self, hq_position, fuel_cost, max_clients_serviced) -> None:
-        self.hq_position = hq_position
+        self.hq_position = Distribution(**hq_position).get_array(size=2)
         self.fuel_cost = fuel_cost
         self.max_clients_serviced = max_clients_serviced
         

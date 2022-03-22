@@ -44,3 +44,7 @@ class Expense:
             "germination":0,
             "transactions":0
         }
+
+    @property
+    def total(self):
+        return sum([x["total"] for x in self.record]) + self.payments["total"]
