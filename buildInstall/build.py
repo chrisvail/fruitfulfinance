@@ -1,5 +1,5 @@
 from queue import Queue
-from ..expense import Expense
+from expense import Expense
 
 
 class BuildUnit:

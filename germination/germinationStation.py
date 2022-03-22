@@ -3,7 +3,7 @@ from random import sample
 from unicodedata import name
 import numpy as np
 
-from ..expense import Expense
+from expense import Expense
 
 class GerminationStation:
 

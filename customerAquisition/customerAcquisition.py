@@ -1,4 +1,4 @@
-from ..distributions import Distribution
+from distributions import Distribution
 from .client import Client
 
 class CustomerAcquisition:

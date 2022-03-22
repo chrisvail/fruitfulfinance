@@ -1,5 +1,5 @@
 from .client import Client
-from ..distributions import Distribution
+from distributions import Distribution
 
 class ActiveClients:
 

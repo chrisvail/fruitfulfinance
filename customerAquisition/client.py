@@ -1,5 +1,5 @@
-from ..distributions import Distribution
-from ..misc_functions import get_subscription_cost, get_plant_count, get_unit_cost
+from distributions import Distribution
+from misc_functions import get_subscription_cost, get_plant_count, get_unit_cost
 
 class Client:
 

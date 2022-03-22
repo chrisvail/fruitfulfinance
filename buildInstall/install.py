@@ -1,7 +1,7 @@
 from queue import Queue
-from ..customerAquisition.client import Client
-from ..shared.transport import Transport
-from ..expense import Expense
+from customerAquisition.client import Client
+from shared.transport import Transport
+from expense import Expense
 
 
 class InstallUnits:

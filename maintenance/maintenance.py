@@ -1,8 +1,8 @@
 from queue import Queue
 
-from ..shared.transport import Transport
-from ..customerAquisition.client import Client
-from ..germination.germinationStation import GerminationStation
+from shared.transport import Transport
+from customerAquisition.client import Client
+from germination.germinationStation import GerminationStation
 
 class Maintenance:
 

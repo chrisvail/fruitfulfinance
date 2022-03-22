@@ -2,7 +2,7 @@ import numpy as np
 from matplotlib import pyplot as plt
 from scipy import rand
 
-from ..customerAquisition.client import Client
+from customerAquisition.client import Client
 
 class Transport:
     
