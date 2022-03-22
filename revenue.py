@@ -28,8 +28,7 @@ class Revenue:
 
 
     def make_payment(self, name, tag, amount, details):
-        if "Client10" == name:
-            print(f"\t{tag}\t{name}\t{amount}")
+        # print(f"\t{tag}\t{name}\t{amount}")
         self.payments["total"] += amount
         self.payments[tag] += amount
         self.payments["transactions"] += 1
