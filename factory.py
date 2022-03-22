@@ -12,6 +12,8 @@ from revenue import Revenue
 from distributions import Distribution
 from clock import SimClock
 
+from customerAquisition.client import Client
+
 
 
 class Simulation:
@@ -114,11 +116,22 @@ if __name__ == "__main__":
 
     stream = open("config2.yaml", 'r')
     dictionary = yaml.safe_load(stream)
-    pprint(dictionary)
+    # pprint(dictionary)
 
-    sim = Simulation(dictionary["sim_details"], dictionary["steps"])
-    sim.run()
+    for i in range(dictionary["runs"]):
+        print(f"Run {i}")
+        sim = Simulation(dictionary["sim_details"], dictionary["steps"])
+        sim.run()
 
+        rev = sim.revenue.total_detailed
+        exp = sim.expense.total_detailed
+        print(f"Revenue Total:")
+        for k, v in rev.items():
+            print(f"\t{k}:\t{v}")
 
-    print(f"Revenue Total: {sim.revenue.total}")
-    print(f"Expense Total: {sim.expense.total}")
+        print(f"Expense Total:")
+        for k, v in exp.items():
+            print(f"\t{k}:\t{v}")
+        
+        print(f"Client Count:\t{Client.client_count}")
+        print(f"Client Churn:\t{Client.client_churned}")

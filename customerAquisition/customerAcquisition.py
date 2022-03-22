@@ -26,6 +26,6 @@ class CustomerAcquisition:
 
         # Create new interested clients and prepend them 
         self.interested_clients.append(int(self.lead_generation.get_single()))
-        print(f"\tInterested Client: {self.interested_clients}")
+        # print(f"\tInterested Client: {self.interested_clients}")
 
 

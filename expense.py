@@ -26,7 +26,7 @@ class Expense:
 
 
     def make_payment(self, name, tag, amount, details={}):
-        print(f"\t{tag}\t{name}\t-{amount}")
+        # print(f"\t{tag}\t{name}\t-{amount}")
         self.payments["total"] += amount
         self.payments[tag] += amount
         self.payments["transactions"] += 1
@@ -47,3 +47,8 @@ class Expense:
     @property
     def total(self):
         return sum([x["total"] for x in self.record]) + self.payments["total"]
+
+    
+    @property
+    def total_detailed(self):
+        return {k:sum([x[k] for x in self.record]) for k in self.payments.keys()}

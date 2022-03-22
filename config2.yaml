@@ -2,7 +2,7 @@
 name: "Initial_test_run"
 period: "week"
 steps: 260
-runs: 10000
+runs: 1
 sim_details:
   germinationStation:
     germination_costs:
@@ -12,7 +12,7 @@ sim_details:
       shelf_running_cost: 1.03488
       new_shelving_unit_capex: 55
       shelves_per_shelving_unit: 6
-      extra_production: 5
+      extra_production: 75
     plant_maturity:
       weeks2mature: 3
       mature_life: 2
@@ -102,7 +102,7 @@ sim_details:
         loc: 0
         scale: 5
     fuel_cost: 0.22
-    max_clients_serviced: 20
+    max_clients_serviced: 10
 
 
 

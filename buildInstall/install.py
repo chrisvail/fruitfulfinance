@@ -16,8 +16,7 @@ class InstallUnits:
         self.plant_store = plant_store
 
     def step(self, actions):
-        installs = self.delayed_installs + self.install_q.get()
-        # installs = self.install_q.get()
+        installs: list[Client] = self.delayed_installs + self.install_q.get()
         self.delayed_installs = []
 
         for client in installs:

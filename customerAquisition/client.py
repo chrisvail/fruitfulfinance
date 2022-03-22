@@ -10,7 +10,7 @@ class Client:
     churn_min = 0.05
 
     def __init__(self, unitCount, subLength, officePosition, churn, plant_dist, plant_request_length, germination_request, revenue, client_details) -> None:
-        self.unit_count = unitCount
+        self.unit_count = max([unitCount, 1])
         self.office_position = officePosition
         self.purchase_price = client_details["purchase_price"]
         self.subscription_price = client_details["subscription_price"]
@@ -47,7 +47,11 @@ class Client:
     
     def step_subscription(self):
 
-        if not self.installed: return "uninstalled"
+        if not self.installed: 
+            return "uninstalled"
+        # elif self.id == 10:
+        #     print("\tClient10 is installed")
+
 
         self.client_lifetime += 1
         if self.client_lifetime % self.plant_request_length == 0:
@@ -79,6 +83,7 @@ class Client:
             return "continued"
         elif self.client_lifetime % self.sub_length == 0:
             if self.churn.get_single():
+                Client.client_churned += 1
                 return "cancelled"
             else:
                 self.revenue.make_payment(
