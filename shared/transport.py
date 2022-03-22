@@ -43,7 +43,7 @@ class Transport:
                         next_client = [dist, client]
                 
                 total_distance += next_client[0]
-                curr_position = next_client[1]
+                curr_position = next_client[1].office_position
                 visited.append(next_client[1].office_position)
                 unvisited.remove(next_client[1])
 

@@ -17,6 +17,7 @@ class Client:
         self.plants_per_unit = client_details["plants_per_unit"]
         self.revenue = revenue
 
+        self.initial_contract_period = client_details["initial_contract_period"]
         self.sub_length = subLength
         self.client_lifetime = 0
 
@@ -66,7 +67,17 @@ class Client:
                 p -= Client.churn_min
                 if p < Client.churn_min: p = Client.churn_min
 
-        if self.client_lifetime % self.sub_length == 0:
+        if self.client_lifetime < self.initial_contract_period and self.client_lifetime % self.sub_length == 0:
+            self.revenue.make_payment(
+                name=f"Client{self.id}",
+                tag="subscription",
+                amount=self.subscription_price*self.unit_count,
+                details={
+                    "client":self
+                }
+            )
+            return "continued"
+        elif self.client_lifetime % self.sub_length == 0:
             if self.churn.get_single():
                 return "cancelled"
             else:

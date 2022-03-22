@@ -10,7 +10,7 @@ class Maintenance:
     def __init__(self, maintenance_q: Queue, plant_store, maintenance_cost, transport: Transport, expense: Expense) -> None:
         self.maintenance_q = maintenance_q
         self.plant_store: GerminationStation = plant_store
-        self.maintenance_cost = maintenance_cost,
+        self.maintenance_cost = maintenance_cost
         self.transport = transport
         self.expense = expense
 

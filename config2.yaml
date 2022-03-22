@@ -43,9 +43,9 @@ sim_details:
           loc: 6
           scale: 2
       subLength:
-        name: "timer"
+        name: "constant"
         parameters:
-          steps: 12
+          value: 4
       officePosition:
         name: "beta"
         parameters:
@@ -69,6 +69,7 @@ sim_details:
       subscription_price: 40
       purchase_price: 500
       plants_per_unit: 30
+      initial_contract_period: 52
     cac:
       thresholds: [5, 10, 25]
   customerAcquisition:

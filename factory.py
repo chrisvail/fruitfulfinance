@@ -114,7 +114,7 @@ if __name__ == "__main__":
 
     stream = open("config2.yaml", 'r')
     dictionary = yaml.safe_load(stream)
-    # pprint(dictionary, depth=3)
+    pprint(dictionary)
 
     sim = Simulation(dictionary["sim_details"], dictionary["steps"])
     sim.run()
