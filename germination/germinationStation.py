@@ -1,3 +1,4 @@
+import enum
 from itertools import chain
 from random import sample
 from unicodedata import name
@@ -54,13 +55,15 @@ class GerminationStation:
 
         self.plant_store = [[0 for __ in range(self.weeks_2_maturity + self.mature_life)] for _ in GerminationStation.plant_varieties]
         self.plant_requests = [0 for _ in GerminationStation.plant_varieties]
-        
+    
 
     def step(self, actions):
 
         # Remove dead plants
         for store in self.plant_store:
             store.pop(0)
+
+        
 
         if sum(self.plant_requests) == 0:
             for variety, store in enumerate(self.plant_store):
@@ -83,7 +86,7 @@ class GerminationStation:
             request_expanded = list(chain(*[[i]*count for i, count in enumerate(self.plant_requests)]))
 
             sampled = sample(request_expanded, spaces)
-            sampled_grouped = [sampled.count(i) for i, _ in enumerate(GerminationStation.plant_varieties)]
+            sampled_grouped =self.bucket_plants(sample)
             for variety, count in enumerate(sampled_grouped):
                 self.plant_store[variety].append(count)
                 self.plant_requests[variety] -= count
@@ -118,16 +121,22 @@ class GerminationStation:
                 tag="germination",
                 amount=new_shelves*self.new_shelf_capex
             )
+        
+        # Ensure all list of same length
+        length = max([len(x) for x in self.plant_store])
+        for store in self.plant_store:
+            while len(store) < length:
+                store.append(0)
 
 
 
     def make_request(self, plants):
         plants = list(plants)
-        plant_counts = [plants.count(i) for i, _ in enumerate(GerminationStation.plant_varieties)]
+        plant_counts = self.bucket_plants(plants)
         self.plant_requests = [a + b for a, b in zip(self.plant_requests, plant_counts)]
 
     def get_plants(self, request):
-        request_grouped = [request.count(i) for i, _ in enumerate(GerminationStation.plant_varieties)]
+        request_grouped = self.bucket_plants(request)
         difference = [a - b for a, b in zip(self.mature_plants, request_grouped)]
         # Can provide all requested plants
         if all([x >= 0 for x in difference]):
@@ -158,3 +167,6 @@ class GerminationStation:
     @property
     def mature_plants(self):
         return [sum(x[:self.mature_life]) for x in self.plant_store]
+
+    def bucket_plants(self, plants):
+        return [np.sum(plants==i) for i, _ in enumerate(GerminationStation.plant_varieties)]

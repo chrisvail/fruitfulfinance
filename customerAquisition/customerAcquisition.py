@@ -18,10 +18,14 @@ class CustomerAcquisition:
         # actions_rel = actions["marketing"]
 
         if self.interested_clients[0]:
-            converted_clients = np.sum(self.conversion.get_array(size=self.interested_clients.pop(0)))
+            
+            converted_clients = np.sum(self.conversion.get_array(size=int(self.interested_clients.pop(0))))
             self.active_clients.add_clients(converted_clients)
+        else:
+            self.interested_clients.pop(0)
 
         # Create new interested clients and prepend them 
-        self.interested_clients.append(self.lead_generation.get_single())
+        self.interested_clients.append(int(self.lead_generation.get_single()))
+        print(f"\tInterested Client: {self.interested_clients}")
 
 

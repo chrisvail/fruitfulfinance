@@ -26,6 +26,7 @@ class Expense:
 
 
     def make_payment(self, name, tag, amount, details={}):
+        print(f"\t{tag}\t{name}\t-{amount}")
         self.payments["total"] += amount
         self.payments[tag] += amount
         self.payments["transactions"] += 1

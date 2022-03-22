@@ -12,7 +12,10 @@ class Client:
     def __init__(self, unitCount, subLength, officePosition, churn, plant_dist, plant_request_length, germination_request, revenue, client_details) -> None:
         self.unit_count = unitCount
         self.office_position = officePosition
-
+        self.purchase_price = client_details["purchase_price"]
+        self.subscription_price = client_details["subscription_price"]
+        self.plants_per_unit = client_details["plants_per_unit"]
+        self.revenue = revenue
 
         self.sub_length = subLength
         self.client_lifetime = 0
@@ -25,9 +28,8 @@ class Client:
         self.germination_request.make_request(self.plant_varieties_requested)
         self.plants_requested = None
 
-        self.purchase_price = client_details["purchase_price"]
-        self.subscription_price = client_details["subscription_price"]
-        self.plants_per_unit = client_details["plants_per_unit"]
+        self.id = Client.client_count
+        Client.client_count += 1
 
         self.revenue.make_payment(
                     name=f"Client{self.id}",
@@ -41,12 +43,6 @@ class Client:
 
         self.installed = False
         
-
-        self.id = Client.client_count
-        Client.client_count += 1
-
-        self.revenue = revenue
-
     
     def step_subscription(self):
 

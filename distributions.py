@@ -18,7 +18,7 @@ class Timer:
         self.steps = steps
 
     def rvs(self, size):
-        steps -= 1
+        self.steps -= 1
         return np.ones((size, ))*(self.steps <= 0)
 
 
@@ -31,7 +31,7 @@ class DiscreteBeta:
     
     def rvs(self, size):
         array = self.dist.rvs(size)
-        np.fix(array*self.buckets).astype("int32")
+        array = np.fix(array*self.buckets).astype("int32")
         return array
 
 class Distribution:
