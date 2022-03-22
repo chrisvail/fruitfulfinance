@@ -151,27 +151,27 @@ if __name__ == "__main__":
         times.append(perf_counter() - t0)
         print(f"Time: {times[-1]}")
 
-        # print("\tStart up")
-        # startup_total = sum([x for x in sim.startup_time.values()])
-        # for key, value in sim.startup_time.items():
-        #     print(f"\t\t{key}:\t{value}\t{value/startup_total*100:.2f}%")
+        print("\tStart up")
+        startup_total = sum([x for x in sim.startup_time.values()])
+        for key, value in sim.startup_time.items():
+            print(f"\t\t{key}:\t{value}\t{value/startup_total*100:.2f}%")
 
-        # step_total = sum([x for x in sim.sim_clock.get_times().values()]) 
-        # print("\tStepping")
-        # for key, value in sim.sim_clock.get_times().items():
-        #     print(f"\t\t{key}:\t{value}\t{value/step_total*100:.2f}%")
+        step_total = sum([x for x in sim.sim_clock.get_times().values()]) 
+        print("\tStepping")
+        for key, value in sim.sim_clock.get_times().items():
+            print(f"\t\t{key}:\t{value}\t{value/step_total*100:.2f}%")
 
-        # rev = sim.revenue.total_detailed
-        # exp = sim.expense.total_detailed
-        # print(f"Revenue Total:")
-        # for k, v in rev.items():
-        #     print(f"\t{k}:\t{v:.2f}\t{v/rev['total']*100:.2f}%")
+        rev = sim.revenue.total_detailed
+        exp = sim.expense.total_detailed
+        print(f"Revenue Total:")
+        for k, v in rev.items():
+            print(f"\t{k}:\t{v:.2f}\t{v/rev['total']*100:.2f}%")
 
-        # print(f"Expense Total:")
-        # for k, v in exp.items():
-        #     print(f"\t{k}:\t{v:.2f}\t{v/exp['total']*100:.2f}%")
+        print(f"Expense Total:")
+        for k, v in exp.items():
+            print(f"\t{k}:\t{v:.2f}\t{v/exp['total']*100:.2f}%")
         
-        # print(f"Client Count:\t{Client.client_count}")
-        # print(f"Client Churn:\t{Client.client_churned}")
+        print(f"Client Count:\t{Client.client_count}")
+        print(f"Client Churn:\t{Client.client_churned}")
 
     print(sum(times))

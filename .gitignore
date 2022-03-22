@@ -4,7 +4,7 @@ __pycache__/
 *$py.class
 
 .VSCodeCounter/
-test.py
+test*.py
 *.png
 
 # C extensions

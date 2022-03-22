@@ -5,8 +5,8 @@ class Client:
     client_count = 0
     client_churned = 0
     expected_request_delay = 4
-    churn_addition = 0.025
-    churn_subtraction = 0.001
+    churn_addition = 0.05
+    churn_subtraction = 0.02
     churn_min = 0.05
 
     def __init__(self, unitCount, subLength, officePosition, churn, plant_dist, plant_request_length, germination_request, revenue, client_details) -> None:
@@ -54,7 +54,7 @@ class Client:
 
 
         self.client_lifetime += 1
-        if self.client_lifetime % self.plant_request_length == 0:
+        if self.client_lifetime % self.plant_request_length == self.plant_request_length - 4:
             self.plant_varieties_requested = self.plant_dist.get_array(size=self.plants_per_unit*self.unit_count)
             self.germination_request.make_request(self.plant_varieties_requested)
             self.plants_requested = self.client_lifetime

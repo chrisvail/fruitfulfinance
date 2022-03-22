@@ -1,4 +1,3 @@
-import enum
 from itertools import chain
 from random import sample
 from unicodedata import name
@@ -22,6 +21,20 @@ class GerminationStation:
         "Sweet Peppers"
         "Oregano"
     ]
+
+    details = {
+        "Mature Plants":0,
+        "Mature Plants2":0,
+        "Total Plants":0,
+        "Plants Requested":0,
+        "Plants Requested2":0,
+        "Plants Requested3":0,
+        "Plants Requested4":0,
+        "Plants Lost":0,
+        "Full":0,
+        "Failed Gets":0,
+        "Free Space":0
+    }
 
     def __init__(self, germination_costs, plant_maturity, initial_shelf_counts, active_varieties, expense: Expense) -> None:
         self.expense = expense
@@ -53,50 +66,64 @@ class GerminationStation:
             amount=self.shelf_count*self.new_shelf_capex
         )
 
-        self.plant_store = [[0 for __ in range(self.weeks_2_maturity + self.mature_life)] for _ in GerminationStation.plant_varieties]
-        self.plant_requests = [0 for _ in GerminationStation.plant_varieties]
+        self.plant_store = np.zeros((self.mature_life + self.weeks_2_maturity, len(GerminationStation.plant_varieties)))
+        self.plant_requests = np.zeros(len(GerminationStation.plant_varieties))
+        # self.plant_requests = [0 for _ in GerminationStation.plant_varieties]
     
 
     def step(self, actions):
 
         # Remove dead plants
-        for store in self.plant_store:
-            store.pop(0)
+        
+        GerminationStation.details["Plants Lost"] += np.sum(self.plant_store[0])/260
+        self.plant_store = self.plant_store[1:]
+
+        GerminationStation.details["Plants Requested2"] += sum(self.plant_requests)/260
+        GerminationStation.details["Mature Plants"] += sum(self.mature_plants)/260
+
+        if self.spaces_available == 0:
+            new_plants = np.zeros(len(GerminationStation.plant_varieties))
+        # if no space, sample from requests to make full
+        elif np.sum(self.plant_requests) > self.spaces_available:
+            sample = np.random.choice(
+                len(GerminationStation.plant_varieties),
+                size=self.spaces_available,
+                replace=True,
+                p=self.plant_requests/np.sum(self.plant_requests)
+            )
+
+            new_plants = self.bucket_plants(sample)
+            self.plant_requests -= new_plants
+        # Fill extra production with sample if no space
+        elif int(np.sum(self.plant_requests)*self.extra_production) > self.spaces_available:
+            sample = np.random.choice(
+                len(GerminationStation.plant_varieties),
+                size=self.spaces_available - np.sum(self.plant_requests),
+                replace=True,
+                p=self.plant_requests/np.sum(self.plant_requests)
+            )
+
+            new_plants = self.bucket_plants(sample)
+            new_plants += self.plant_requests
+            self.plant_requests = np.zeros(len(GerminationStation.plant_varieties))
+        else:
+            GerminationStation.details["Free Space"] += 1
+            new_plants = np.ceil(self.plant_requests*self.extra_production).astype(np.int32)
+            GerminationStation.details["Plants Requested3"] += np.sum(new_plants)/260
+            self.plant_requests = np.zeros(len(GerminationStation.plant_varieties))
+
+
+        new_plants = np.reshape(new_plants, (1, len(GerminationStation.plant_varieties)))
+        self.plant_store = np.append(self.plant_store, new_plants, axis=0)
 
         
 
-        if sum(self.plant_requests) == 0:
-            for variety, store in enumerate(self.plant_store):
-                if variety < self.active_varieties:
-                    store.append(self.extra_production)
-
-        elif sum(self.plant_requests) + self.total_plants <= self.total_plant_space:
-            for store, request in zip(self.plant_store, self.plant_requests):
-                store.append(request)
-
-            # Add buffer plants
-            if sum(self.plant_requests) + self.total_plants + self.active_varieties*self.extra_production <= self.total_plant_space:
-                for variety, store in enumerate(self.plant_store):
-                    if variety < self.active_varieties:
-                        store.append(self.extra_production)
-            self.plant_requests = [0 for _ in GerminationStation.plant_varieties]
-        else:
-            # Randomly sample from requests to fill space
-            spaces = self.total_plant_space - self.total_plants
-            request_expanded = list(chain(*[[i]*count for i, count in enumerate(self.plant_requests)]))
-
-            sampled = sample(request_expanded, spaces)
-            sampled_grouped =self.bucket_plants(sample)
-            for variety, count in enumerate(sampled_grouped):
-                self.plant_store[variety].append(count)
-                self.plant_requests[variety] -= count
-
         # Expense all the costs
-        total_seeds_planted = sum([x[-1] for x in self.plant_store])
+        
         self.expense.make_payment(
             name="seed_planting",
             tag="germination",
-            amount=total_seeds_planted*self.cost_per_seed
+            amount=np.sum(new_plants)*self.cost_per_seed
         )
 
         total_shelves = np.ceil(self.total_plants/self.seeds_per_shelf)
@@ -122,39 +149,44 @@ class GerminationStation:
                 amount=new_shelves*self.new_shelf_capex
             )
         
-        # Ensure all list of same length
-        length = max([len(x) for x in self.plant_store])
-        for store in self.plant_store:
-            while len(store) < length:
-                store.append(0)
 
+
+        GerminationStation.details["Total Plants"] += self.total_plants/260
+        GerminationStation.details["Mature Plants2"] += self.mature_plants/260
+        if self.total_plants == self.total_plant_space: GerminationStation.details["Full"] += 1
+        GerminationStation.details["Plants Requested4"] += new_plants/260
 
 
     def make_request(self, plants):
-        plants = list(plants)
+        GerminationStation.details["Plants Requested"] += len(plants)/260
+
         plant_counts = self.bucket_plants(plants)
-        self.plant_requests = [a + b for a, b in zip(self.plant_requests, plant_counts)]
+        self.plant_requests += plant_counts
 
     def get_plants(self, request):
         request_grouped = self.bucket_plants(request)
-        difference = [a - b for a, b in zip(self.mature_plants, request_grouped)]
-        # Can provide all requested plants
-        if all([x >= 0 for x in difference]):
+        difference = self.mature_plants - request_grouped
+
+        # Cant provide plants
+        if np.any(difference < 0):
+            GerminationStation.details["Failed Gets"] += 1
+            return None
+        else:
             self._remove_plants(request_grouped)
             return request
-        else:
-            return None
+        
 
-    def _remove_plants(self, request_grouped):
-        for variety, count in enumerate(request_grouped):
-            for i in range(self.mature_life):
-                if count > self.plant_store[variety][i]:
-                    count -= self.plant_store[variety][i]
-                    self.plant_store[variety][i] = 0
+    def _remove_plants(self, request):
+        for i, plants in enumerate(self.plant_store[:self.mature_life, :]):
+            for j, x in enumerate(plants):
+                diff = x - request[j]
+
+                if diff >= 0:
+                    self.plant_store[i, j] = diff
+                    request[j] = 0
                 else:
-                    self.plant_store[variety][i] -= count
-                    count = 0
-                    break
+                    self.plant_store[i, j] = 0
+                    request[j] = -diff
 
     @property 
     def total_plant_space(self):
@@ -162,11 +194,20 @@ class GerminationStation:
 
     @property
     def total_plants(self):
-        return sum(chain(*self.plant_store))
+        return np.sum(self.plant_store, axis=None)
 
     @property
     def mature_plants(self):
-        return [sum(x[:self.mature_life]) for x in self.plant_store]
+        return np.sum(self.plant_store[:self.mature_life, :], axis=0)
 
-    def bucket_plants(self, plants):
-        return [np.sum(plants==i) for i, _ in enumerate(GerminationStation.plant_varieties)]
+    @property
+    def spaces_available(self):
+        return self.total_plant_space - self.total_plants
+
+    def bucket_plants(self, plants: np.ndarray):
+        return np.array([np.sum(np.where(plants == i, 1, 0)) for i, _ in enumerate(GerminationStation.plant_varieties)])
+
+    def __del__(self):
+        print("\nGermination Station")
+        for k, v in GerminationStation.details.items():
+            print(f"\t{k}\t{v}")

@@ -14,7 +14,7 @@ class Maintenance:
         "queueDelayed":{"time":0, "count":0},
         "getPlants":{"time":0, "count":0},
         "delayedClients":{"time":0, "count":260},
-        "actualClients":{"time":0, "count":260}
+        "actualClients":{"time":0, "count":260},
     }
 
     def __init__(self, maintenance_q: Queue, plant_store, maintenance_cost, transport: Transport, expense: Expense) -> None:
@@ -77,6 +77,7 @@ class Maintenance:
                     amount=client.unit_count*self.maintenance_cost
                 )
 
-    # def __del__(self):
-    #     for k, v in Maintenance.timing.items():
-    #         print(f"\t{k}\t{v['time']}\t{v['count']}\t{v['time']/v['count']}")
+    def __del__(self):
+        print("\nMaintenance")
+        for k, v in Maintenance.timing.items():
+            print(f"\t{k}\t{v['time']}\t{v['count']}\t{v['time']/max([v['count'], 1])}")
