@@ -16,7 +16,6 @@ class Revenue:
         }
         self.logger = getLogger(__name__)
 
-        self.step = 0
         self.record = []
 
         self.build_q = build_q
@@ -25,7 +24,7 @@ class Revenue:
     def step(self, actions):
         self.record.append(self.payments)
         self.zero_payments()
-        self.step += 1
+
 
 
     def make_payment(self, name, tag, amount, details):

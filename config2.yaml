@@ -79,10 +79,9 @@ sim_details:
         loc: 20
         scale: 5
     conversion:
-      name: "gaussian"
+      name: "binomial"
       parameters:
-        loc: 0.07
-        scale: 0.1
+        p: 0.07
   build:
     man_cost: [[63.53, 47.88, 41.90], 31.76]
     mat_cost: [[203.68, 169.01, 146.58], 105.86]

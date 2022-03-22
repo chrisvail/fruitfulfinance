@@ -48,7 +48,7 @@ class ActiveClients:
             else:
                 client_mask.append(True)
 
-        self.clients = [client for client, mask in zip(self.active_clients, client_mask) if mask]
+        self.clients = [client for client, mask in zip(self.clients, client_mask) if mask]
 
 
     def add_clients(self, client_count):
@@ -57,7 +57,7 @@ class ActiveClients:
         cac = self.select_cac(client_count)
         self.expense.make_payment(
             name="Customer Acquisition",
-            tag="Customer Acquisition",
+            tag="customer_acquisition",
             amount=cac*client_count,
         )
 

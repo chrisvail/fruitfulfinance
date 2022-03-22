@@ -1,5 +1,6 @@
 from distributions import Distribution
 from .client import Client
+import numpy as np
 
 class CustomerAcquisition:
 
@@ -16,13 +17,11 @@ class CustomerAcquisition:
         
         # actions_rel = actions["marketing"]
 
-        # Convert interested clients
-        conversion_rate = self.conversion.get_single()
-        convert_dist = Distribution("bernoulli", {"p":conversion_rate})
-        converted_clients = sum(convert_dist.rvs(size=self.interested_clients.pop()))
-        self.active_clients.add_clients(converted_clients)
+        if self.interested_clients[0]:
+            converted_clients = np.sum(self.conversion.get_array(size=self.interested_clients.pop(0)))
+            self.active_clients.add_clients(converted_clients)
 
         # Create new interested clients and prepend them 
-        self.interested_clients = [self.lead_generation.get_single()] + self.interested_clients
+        self.interested_clients.append(self.lead_generation.get_single())
 
 

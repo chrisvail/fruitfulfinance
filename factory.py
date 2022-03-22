@@ -97,9 +97,13 @@ class Simulation:
 
     def run(self):
         actions = {
+            "phase":1,
+            "add_new_shelves":0,
+            "plot_maintenance":None
+        }            
 
-        }
-        for _ in range(self.steps):
+        for i in range(self.steps):
+            print(f"Step {i}")
             self.sim_clock.step(actions)
         
         
@@ -110,7 +114,7 @@ if __name__ == "__main__":
 
     stream = open("config2.yaml", 'r')
     dictionary = yaml.safe_load(stream)
-    pprint(dictionary, depth=3)
+    # pprint(dictionary, depth=3)
 
     sim = Simulation(dictionary["sim_details"], dictionary["steps"])
     sim.run()

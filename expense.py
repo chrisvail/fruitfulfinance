@@ -9,7 +9,7 @@ class Expense:
     def __init__(self) -> None:
         self.payments = {
             "total":0,
-            "customer acquisition":0,
+            "customer_acquisition":0,
             "build":0,
             "maintenance":0,
             "germination":0,
@@ -17,14 +17,12 @@ class Expense:
         }
         self.logger = getLogger(__name__)
 
-        self.step = 0
         self.record = []
 
 
     def step(self, actions):
         self.record.append(self.payments)
         self.zero_payments()
-        self.step += 1
 
 
     def make_payment(self, name, tag, amount, details={}):
@@ -38,7 +36,7 @@ class Expense:
     def zero_payments(self):
         self.payments = {
             "total":0,
-            "customer acquisition":0,
+            "customer_acquisition":0,
             "build":0,
             "maintenance":0,
             "germination":0,

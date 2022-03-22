@@ -15,4 +15,5 @@ class SimClock:
         self._step += 1
         self.logger.info(f"Starting step: {self._step}")
         for sub in self.subscribers:
+            print(f"Name: {type(sub).__name__}\tType: {type(sub)}")
             sub.step(actions)
