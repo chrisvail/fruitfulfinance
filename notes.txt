@@ -49,3 +49,4 @@ TODO:
 
 
     - Add sub_price, pur_price, plants_per_unit to simulation
+    - Not sure if the sublength distribution is correct - probably needs to be a random choice
