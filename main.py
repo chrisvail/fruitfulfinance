@@ -1,43 +1,39 @@
+from time import perf_counter
 import yaml
 import scipy.stats as stats
 import matplotlib.pyplot as plt
+import pandas as pd
 import numpy as np
+import multiprocessing as mp
+from factory import Simulation
+import os
 
-_distributions = {
-        "beta":stats.beta,
-        "erlang":stats.erlang,
-        "gaussian":stats.norm,
-        "poisson":stats.poisson,
-        "uniform":stats.uniform,
-        "skew-norm":stats.skewnorm,
-        "power":stats.powerlaw,
-        "logistic":stats.logistic,
-        "lognorm":stats.lognorm,
-        "chi2":stats.chi2,
-        # "constant":Constant,
-        "binomial":stats.bernoulli,
-        # "timer": Timer
-    }
-dists = []
-
-if __name__ == '__main__':
-    stream = open("config.yaml", 'r')
+def main():
+    stream = open("config2.yaml", 'r')
     dictionary = yaml.safe_load(stream)
 
-    for system, params in dictionary['systems'].items():
-        for key, value in params.items():
-            if params[key]['name'] == 'gaussian':
-                dist = _distributions[params[key]['name']](loc=params[key]['parameters']['loc'], scale=params[key]['parameters']['scale'])
-                dists.append([key, dist])
-            elif params[key]['name'] == 'skew-norm':
-                dist = _distributions[params[key]['name']](params[key]['parameters']['a'], loc=params[key]['parameters']['loc'], scale=params[key]['parameters']['scale'])
-                dists.append([key, dist])
+    path = os.path.abspath(".")
+    if not os.path.isdir(f"{dictionary['name']}"):
+        os.mkdir(path + f"\\{dictionary['name']}")
+
+    tasks = ((dictionary, i) for i in range(dictionary["runs"]))
+    t0 = perf_counter()
+    with mp.Pool(processes=mp.cpu_count()) as pool:
+        results = pool.starmap(worker, tasks)
+
+    print(f"Completed {dictionary['runs']} runs in {perf_counter() - t0} seconds")
+    results = [x.to_numpy() for x in results]
+    results = np.stack(results, axis=-1)
+    np.save(f"{dictionary['name']}/{dictionary['name']}_all.npy", results)
 
 
-fig, ax = plt.subplots(1, 1)
-x = np.linspace(0, 250, 1000)
-for param, dist in dists:
-    ax.plot(x, dist.pdf(x), label=param)
-ax.legend()
+def worker(config, run_no):
+    sim = Simulation(config["sim_details"], config["steps"])
+    sim.run()
+    df = pd.DataFrame(sim.record)
+    df.to_csv(f"{config['name']}/{config['name']}{run_no}.csv")
+    return df
 
-plt.show()
+
+if __name__ == '__main__':
+    main()
