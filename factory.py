@@ -29,7 +29,7 @@ class Simulation:
         self.record = []
 
         if action_function is None:
-            self.action_function = lambda x: {"phase":1,"add_new_shelves":0,"plot_maintenance":None} 
+            self.action_function = lambda self, step: {"phase":1,"add_new_shelves":0,"plot_maintenance":None} 
         else:
             self.action_function = action_function
 
@@ -122,8 +122,8 @@ class Simulation:
         self.startup_time["Subscription"] = perf_counter() - t0
 
     def run(self):
-        actions = self.action_function(self)         
         for i in range(self.steps):
+            actions = self.action_function(self, i)         
             self.sim_clock.step(actions)
             self.make_record()
         
