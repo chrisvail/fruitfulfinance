@@ -87,7 +87,11 @@ sim_details:
         value: 0
     fuel_cost: 0.22
     max_clients_serviced: 1
-
+  op_cost:
+    op_cost_dist:
+      name: constant
+      parameters:
+        value: 750
 
 
 

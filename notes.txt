@@ -50,3 +50,13 @@ TODO:
 
     - Add sub_price, pur_price, plants_per_unit to simulation
     - Not sure if the sublength distribution is correct - probably needs to be a random choice
+
+
+Action Functions:
+
+- phase
+    > Change on number of active clients?
+    > MRR?
+    > 
+- add_new_shelves
+- plot_maintenance

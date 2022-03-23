@@ -12,6 +12,7 @@ from maintenance.maintenance import Maintenance
 from shared.transport import Transport
 from expense import Expense
 from revenue import Revenue
+from operationCost import OperationCost
 from distributions import Distribution
 from clock import SimClock
 
@@ -46,6 +47,9 @@ class Simulation:
         self.expense = Expense()
         self.revenue = Revenue(build_q, maintenance_q)
         self.startup_time["Cashflow"] = perf_counter() - t0
+
+        # Create op_cost
+        self.operations = OperationCost(expense=self.expense, **sim_details["op_cost"])
 
         # Create transportation
         t0 = perf_counter()
@@ -138,6 +142,7 @@ class Simulation:
             "expenses_build": self.expense.record[-1]["build"],
             "expenses_maintenance": self.expense.record[-1]["maintenance"],
             "expenses_germination": self.expense.record[-1]["germination"],
+            "expenses_op_cost": self.expense.record[-1]["op_cost"],
             "expenses_transactions": self.expense.record[-1]["transactions"],
             "revenue_total": self.revenue.record[-1]["total"],
             "revenue_sale": self.revenue.record[-1]["sale"],

@@ -13,6 +13,7 @@ class Expense:
             "build":0,
             "maintenance":0,
             "germination":0,
+            "op_cost":0,
             "transactions":0
         }
         self.logger = getLogger(__name__)
@@ -41,6 +42,7 @@ class Expense:
             "build":0,
             "maintenance":0,
             "germination":0,
+            "op_cost":0,
             "transactions":0
         }
 

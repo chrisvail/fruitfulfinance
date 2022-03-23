@@ -103,7 +103,12 @@ sim_details:
         scale: 5
     fuel_cost: 0.22
     max_clients_serviced: 5
-
+  op_cost:
+    op_cost_dist:
+      name: gaussian
+      parameters:
+        loc: 750
+        scale: 50
 
 
 
