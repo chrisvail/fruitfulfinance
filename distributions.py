@@ -10,6 +10,15 @@ class Constant:
     def rvs(self, size):
         return np.ones((size, ))*self.value
 
+class ConstantPercentage:
+    def __init__(self, p) -> None:
+        self.p = p
+
+    def rvs(self, size):
+        positives = int(size*self.p)
+        return np.concatenate([np.ones(positives), np.zeros(size - positives)]).astype("int")
+
+
 class Timer:
     """ Discrete distribution which returns 0 until <steps> steps 
         have been taken then returns 1. Good for modeling constant 
@@ -48,6 +57,7 @@ class Distribution:
         "lognorm":stats.lognorm,
         "chi2":stats.chi2,
         "constant":Constant,
+        "constantPercentage":ConstantPercentage,
         "binomial":stats.bernoulli,
         "timer":Timer,
         "discreteBeta":DiscreteBeta

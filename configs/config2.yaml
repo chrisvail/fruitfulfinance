@@ -1,8 +1,8 @@
 ---
-name: "Initial_test_run"
+name: "Initial_test_run2"
 period: "week"
 steps: 260
-runs: 1000
+runs: 1
 sim_details:
   germinationStation:
     germination_costs:

@@ -21,12 +21,17 @@ from customerAquisition.client import Client
 
 class Simulation:
 
-    def __init__(self, sim_details, steps) -> None:
+    def __init__(self, sim_details, steps, action_function=None) -> None:
         self.startup_time = {}
         # Create clock for the simulation
         t0 = perf_counter()
         self.sim_clock = SimClock()
         self.record = []
+
+        if action_function is None:
+            self.action_function = lambda x: {"phase":1,"add_new_shelves":0,"plot_maintenance":None} 
+        else:
+            self.action_function = action_function
 
         self.steps = steps
 
@@ -48,7 +53,7 @@ class Simulation:
         self.startup_time["Trasport"] = perf_counter() - t0
         # Create germination station
         t0 = perf_counter()
-        germination_station = GerminationStation(
+        self.germination_station = GerminationStation(
             expense=self.expense, 
             **sim_details["germinationStation"]
         )
@@ -66,38 +71,38 @@ class Simulation:
         self.active_clients = ActiveClients(
             revenue=self.revenue, 
             expense=self.expense, 
-            plant_requester=germination_station,
+            plant_requester=self.germination_station,
             **sim_details["activeClients"]
         )
 
-        customer_acquisition = CustomerAcquisition(
+        self.customer_acquisition = CustomerAcquisition(
             activeClients=self.active_clients,
             **sim_details["customerAcquisition"]
         )
         self.startup_time["Customer"] = perf_counter() - t0
         # Build system
         t0 = perf_counter()
-        build = BuildUnit(
+        self.build = BuildUnit(
             expense=self.expense,
             build_q=build_q,
             install_q=install_q,
             **sim_details["build"]
         )
 
-        install = InstallUnits(
+        self.install = InstallUnits(
             transport=transport,
             install_q=install_q,
             expense=self.expense,
-            plant_store=germination_station,
+            plant_store=self.germination_station,
             **sim_details["install"]
         )
         self.startup_time["Build"] = perf_counter() - t0
 
         # Maintenance
         t0 = perf_counter()
-        maintenance = Maintenance(
+        self.maintenance = Maintenance(
             maintenance_q=maintenance_q,
-            plant_store=germination_station,
+            plant_store=self.germination_station,
             transport=transport,
             expense=self.expense,
             **sim_details["maintenance"]
@@ -106,26 +111,22 @@ class Simulation:
         # Add objects to the simulation clock
         t0 = perf_counter()
         self.sim_clock.subscribe(self.active_clients)
-        self.sim_clock.subscribe(customer_acquisition)
+        self.sim_clock.subscribe(self.customer_acquisition)
         self.sim_clock.subscribe(self.revenue)
-        self.sim_clock.subscribe(build)
-        self.sim_clock.subscribe(install)
-        self.sim_clock.subscribe(maintenance)
-        self.sim_clock.subscribe(germination_station)
+        self.sim_clock.subscribe(self.build)
+        self.sim_clock.subscribe(self.install)
+        self.sim_clock.subscribe(self.maintenance)
+        self.sim_clock.subscribe(self.germination_station)
         self.sim_clock.subscribe(self.expense)
 
         self.startup_time["Subscription"] = perf_counter() - t0
 
     def run(self):
-        actions = {
-            "phase":1,
-            "add_new_shelves":0,
-            "plot_maintenance":None
-        }            
+        actions = self.action_function(self)         
         for i in range(self.steps):
             self.sim_clock.step(actions)
             self.make_record()
-
+        
 
     def make_record(self):
         # Cashflow

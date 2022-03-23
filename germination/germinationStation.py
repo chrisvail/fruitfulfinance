@@ -67,7 +67,7 @@ class GerminationStation:
         )
 
         self.plant_store = np.zeros((self.mature_life + self.weeks_2_maturity, len(GerminationStation.plant_varieties)))
-        self.plant_requests = np.zeros(len(GerminationStation.plant_varieties))
+        self.plant_requests = np.zeros(len(GerminationStation.plant_varieties), dtype="int")
         # self.plant_requests = [0 for _ in GerminationStation.plant_varieties]
     
 
@@ -82,7 +82,7 @@ class GerminationStation:
         # GerminationStation.details["Mature Plants"] += sum(self.mature_plants)/260
 
         if self.spaces_available == 0:
-            new_plants = np.zeros(len(GerminationStation.plant_varieties))
+            new_plants = np.zeros(len(GerminationStation.plant_varieties), dtype="int")
         # if no space, sample from requests to make full
         elif np.sum(self.plant_requests) > self.spaces_available:
             sample = np.random.choice(
@@ -98,19 +98,19 @@ class GerminationStation:
         elif int(np.sum(self.plant_requests)*self.extra_production) > self.spaces_available:
             sample = np.random.choice(
                 len(GerminationStation.plant_varieties),
-                size=self.spaces_available - np.sum(self.plant_requests),
+                size=(self.spaces_available - np.sum(self.plant_requests)).astype("int"),
                 replace=True,
                 p=self.plant_requests/np.sum(self.plant_requests)
             )
 
             new_plants = self.bucket_plants(sample)
             new_plants += self.plant_requests
-            self.plant_requests = np.zeros(len(GerminationStation.plant_varieties))
+            self.plant_requests = np.zeros(len(GerminationStation.plant_varieties), dtype="int")
         else:
             # GerminationStation.details["Free Space"] += 1
             new_plants = np.ceil(self.plant_requests*self.extra_production).astype(np.int32)
             # GerminationStation.details["Plants Requested3"] += np.sum(new_plants)/260
-            self.plant_requests = np.zeros(len(GerminationStation.plant_varieties))
+            self.plant_requests = np.zeros(len(GerminationStation.plant_varieties), dtype="int")
 
 
         new_plants = np.reshape(new_plants, (1, len(GerminationStation.plant_varieties)))
@@ -202,10 +202,10 @@ class GerminationStation:
 
     @property
     def spaces_available(self):
-        return self.total_plant_space - self.total_plants
+        return (self.total_plant_space - self.total_plants).astype("int")
 
     def bucket_plants(self, plants: np.ndarray):
-        return np.array([np.sum(np.where(plants == i, 1, 0)) for i, _ in enumerate(GerminationStation.plant_varieties)])
+        return np.array([np.sum(np.where(plants == i, 1, 0)) for i, _ in enumerate(GerminationStation.plant_varieties)], dtype="int")
 
     # def __del__(self):
     #     print("\nGermination Station")

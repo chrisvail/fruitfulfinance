@@ -18,7 +18,6 @@ class CustomerAcquisition:
         # actions_rel = actions["marketing"]
 
         if self.interested_clients[0] > 0:
-            
             converted_clients = np.sum(self.conversion.get_array(size=int(self.interested_clients.pop(0))))
             self.active_clients.add_clients(converted_clients)
         else:

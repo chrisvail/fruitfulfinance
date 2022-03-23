@@ -8,6 +8,8 @@ test*.py
 *.png
 *.csv
 Initial_test_run/
+Initial_test_run2/
+Deterministic/
 
 # C extensions
 *.so

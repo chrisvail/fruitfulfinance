@@ -9,7 +9,7 @@ from factory import Simulation
 import os
 
 def main():
-    stream = open("config2.yaml", 'r')
+    stream = open("configs\deterministic.yaml", 'r')
     dictionary = yaml.safe_load(stream)
 
     path = os.path.abspath(".")
