@@ -1,5 +1,7 @@
 from queue import Queue
 from time import perf_counter
+import pandas as pd
+from matplotlib import pyplot as plt
 
 from buildInstall.build import BuildUnit
 from buildInstall.install import InstallUnits
@@ -24,6 +26,7 @@ class Simulation:
         # Create clock for the simulation
         t0 = perf_counter()
         self.sim_clock = SimClock()
+        self.record = []
 
         self.steps = steps
 
@@ -60,7 +63,7 @@ class Simulation:
         cac_high = Distribution(**sim_details["cac"]["cac_high"]).get_single()
         sim_details["activeClients"]["cac"]["values"] = [cac_low, cac_med, cac_high]
 
-        active_clients = ActiveClients(
+        self.active_clients = ActiveClients(
             revenue=self.revenue, 
             expense=self.expense, 
             plant_requester=germination_station,
@@ -68,7 +71,7 @@ class Simulation:
         )
 
         customer_acquisition = CustomerAcquisition(
-            activeClients=active_clients,
+            activeClients=self.active_clients,
             **sim_details["customerAcquisition"]
         )
         self.startup_time["Customer"] = perf_counter() - t0
@@ -102,7 +105,7 @@ class Simulation:
         self.startup_time["Maintenance"] = perf_counter() - t0
         # Add objects to the simulation clock
         t0 = perf_counter()
-        self.sim_clock.subscribe(active_clients)
+        self.sim_clock.subscribe(self.active_clients)
         self.sim_clock.subscribe(customer_acquisition)
         self.sim_clock.subscribe(self.revenue)
         self.sim_clock.subscribe(build)
@@ -119,17 +122,33 @@ class Simulation:
             "add_new_shelves":0,
             "plot_maintenance":None
         }            
-        times = []
         for i in range(self.steps):
-            # print(f"Step {i}")
-            if i == 100:
-                actions["plot_maintenance"] = "testplot_sim"
-            t0 = perf_counter()
             self.sim_clock.step(actions)
-            times.append(perf_counter() - t0)
-            if i == 100:
-                actions["plot_maintenance"] = None
-        # print(sum(times)/len(times))
+            self.make_record()
+
+
+    def make_record(self):
+        # Cashflow
+        # Active units 
+        # MARR
+        record = {
+            "expenses_total": self.expense.record[-1]["total"],
+            "expenses_customer_acquisition": self.expense.record[-1]["customer_acquisition"],
+            "expenses_build": self.expense.record[-1]["build"],
+            "expenses_maintenance": self.expense.record[-1]["maintenance"],
+            "expenses_germination": self.expense.record[-1]["germination"],
+            "expenses_transactions": self.expense.record[-1]["transactions"],
+            "revenue_total": self.revenue.record[-1]["total"],
+            "revenue_sale": self.revenue.record[-1]["sale"],
+            "revenue_subscription": self.revenue.record[-1]["subscription"],
+            "revenue_transactions": self.revenue.record[-1]["transactions"],
+            "client_count":len(self.active_clients.clients),
+            "active_units": sum([x.unit_count for x in self.active_clients.clients]),
+            "average_lifetime": sum([x.client_lifetime for x in self.active_clients.clients])/max([len(self.active_clients.clients), 1]),
+            "churned":self.active_clients.churned
+        }
+
+        self.record.append(record)
         
 
 if __name__ == "__main__":
@@ -151,15 +170,15 @@ if __name__ == "__main__":
         times.append(perf_counter() - t0)
         print(f"Time: {times[-1]}")
 
-        print("\tStart up")
-        startup_total = sum([x for x in sim.startup_time.values()])
-        for key, value in sim.startup_time.items():
-            print(f"\t\t{key}:\t{value}\t{value/startup_total*100:.2f}%")
+        # print("\tStart up")
+        # startup_total = sum([x for x in sim.startup_time.values()])
+        # for key, value in sim.startup_time.items():
+        #     print(f"\t\t{key}:\t{value}\t{value/startup_total*100:.2f}%")
 
-        step_total = sum([x for x in sim.sim_clock.get_times().values()]) 
-        print("\tStepping")
-        for key, value in sim.sim_clock.get_times().items():
-            print(f"\t\t{key}:\t{value}\t{value/step_total*100:.2f}%")
+        # step_total = sum([x for x in sim.sim_clock.get_times().values()]) 
+        # print("\tStepping")
+        # for key, value in sim.sim_clock.get_times().items():
+        #     print(f"\t\t{key}:\t{value}\t{value/step_total*100:.2f}%")
 
         rev = sim.revenue.total_detailed
         exp = sim.expense.total_detailed
@@ -173,5 +192,14 @@ if __name__ == "__main__":
         
         print(f"Client Count:\t{Client.client_count}")
         print(f"Client Churn:\t{Client.client_churned}")
+
+        df = pd.DataFrame(sim.record)
+
+        print(df)
+        df.to_csv(f"{dictionary['name']}{i}.csv")
+        df.plot.line(y=["client_count", "active_units"])
+        df.plot.line(y=["client_count", "churned"])
+
+        plt.show()
 
     print(sum(times))

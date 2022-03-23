@@ -5,9 +5,9 @@ class Client:
     client_count = 0
     client_churned = 0
     expected_request_delay = 4
-    churn_addition = 0.05
-    churn_subtraction = 0.02
-    churn_min = 0.05
+    churn_addition = 0.001
+    churn_subtraction = 0.001
+    churn_min = 0.0005
 
     def __init__(self, unitCount, subLength, officePosition, churn, plant_dist, plant_request_length, germination_request, revenue, client_details) -> None:
         self.unit_count = max([unitCount, 1])
@@ -65,11 +65,14 @@ class Client:
            if self.churn.name == "binomial":
                 p = self.churn.parameters["p"]
                 p += Client.churn_addition
+                p = min([p, 1])
+                self.churn.update_param({"p":p})
         else:
             if self.churn.name == "binomial":
                 p = self.churn.parameters["p"]
                 p -= Client.churn_min
-                if p < Client.churn_min: p = Client.churn_min
+                p = max([p, Client.churn_min])
+                self.churn.update_param({"p":p})
 
         if self.client_lifetime < self.initial_contract_period and self.client_lifetime % self.sub_length == 0:
             self.revenue.make_payment(

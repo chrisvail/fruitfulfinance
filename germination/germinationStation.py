@@ -22,19 +22,19 @@ class GerminationStation:
         "Oregano"
     ]
 
-    details = {
-        "Mature Plants":0,
-        "Mature Plants2":0,
-        "Total Plants":0,
-        "Plants Requested":0,
-        "Plants Requested2":0,
-        "Plants Requested3":0,
-        "Plants Requested4":0,
-        "Plants Lost":0,
-        "Full":0,
-        "Failed Gets":0,
-        "Free Space":0
-    }
+    # details = {
+    #     "Mature Plants":0,
+    #     "Mature Plants2":0,
+    #     "Total Plants":0,
+    #     "Plants Requested":0,
+    #     "Plants Requested2":0,
+    #     "Plants Requested3":0,
+    #     "Plants Requested4":0,
+    #     "Plants Lost":0,
+    #     "Full":0,
+    #     "Failed Gets":0,
+    #     "Free Space":0
+    # }
 
     def __init__(self, germination_costs, plant_maturity, initial_shelf_counts, active_varieties, expense: Expense) -> None:
         self.expense = expense
@@ -75,11 +75,11 @@ class GerminationStation:
 
         # Remove dead plants
         
-        GerminationStation.details["Plants Lost"] += np.sum(self.plant_store[0])/260
+        # GerminationStation.details["Plants Lost"] += np.sum(self.plant_store[0])/260
         self.plant_store = self.plant_store[1:]
 
-        GerminationStation.details["Plants Requested2"] += sum(self.plant_requests)/260
-        GerminationStation.details["Mature Plants"] += sum(self.mature_plants)/260
+        # GerminationStation.details["Plants Requested2"] += sum(self.plant_requests)/260
+        # GerminationStation.details["Mature Plants"] += sum(self.mature_plants)/260
 
         if self.spaces_available == 0:
             new_plants = np.zeros(len(GerminationStation.plant_varieties))
@@ -107,9 +107,9 @@ class GerminationStation:
             new_plants += self.plant_requests
             self.plant_requests = np.zeros(len(GerminationStation.plant_varieties))
         else:
-            GerminationStation.details["Free Space"] += 1
+            # GerminationStation.details["Free Space"] += 1
             new_plants = np.ceil(self.plant_requests*self.extra_production).astype(np.int32)
-            GerminationStation.details["Plants Requested3"] += np.sum(new_plants)/260
+            # GerminationStation.details["Plants Requested3"] += np.sum(new_plants)/260
             self.plant_requests = np.zeros(len(GerminationStation.plant_varieties))
 
 
@@ -151,14 +151,14 @@ class GerminationStation:
         
 
 
-        GerminationStation.details["Total Plants"] += self.total_plants/260
-        GerminationStation.details["Mature Plants2"] += self.mature_plants/260
-        if self.total_plants == self.total_plant_space: GerminationStation.details["Full"] += 1
-        GerminationStation.details["Plants Requested4"] += new_plants/260
+        # GerminationStation.details["Total Plants"] += self.total_plants/260
+        # GerminationStation.details["Mature Plants2"] += self.mature_plants/260
+        # if self.total_plants == self.total_plant_space: GerminationStation.details["Full"] += 1
+        # GerminationStation.details["Plants Requested4"] += new_plants/260
 
 
     def make_request(self, plants):
-        GerminationStation.details["Plants Requested"] += len(plants)/260
+        # GerminationStation.details["Plants Requested"] += len(plants)/260
 
         plant_counts = self.bucket_plants(plants)
         self.plant_requests += plant_counts
@@ -169,7 +169,7 @@ class GerminationStation:
 
         # Cant provide plants
         if np.any(difference < 0):
-            GerminationStation.details["Failed Gets"] += 1
+            # GerminationStation.details["Failed Gets"] += 1
             return None
         else:
             self._remove_plants(request_grouped)
@@ -207,7 +207,7 @@ class GerminationStation:
     def bucket_plants(self, plants: np.ndarray):
         return np.array([np.sum(np.where(plants == i, 1, 0)) for i, _ in enumerate(GerminationStation.plant_varieties)])
 
-    def __del__(self):
-        print("\nGermination Station")
-        for k, v in GerminationStation.details.items():
-            print(f"\t{k}\t{v}")
+    # def __del__(self):
+    #     print("\nGermination Station")
+    #     for k, v in GerminationStation.details.items():
+    #         print(f"\t{k}\t{v}")

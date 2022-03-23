@@ -37,6 +37,8 @@ class ActiveClients:
         self.expense = expense
         self.cac = cac
 
+        self.churned = 0
+
 
     def step(self, actions):
         # Could log which clients are getting removed / what theyre all doing
@@ -48,6 +50,7 @@ class ActiveClients:
             else:
                 client_mask.append(True)
 
+        self.churned = len(client_mask) - sum(client_mask)
         self.clients = [client for client, mask in zip(self.clients, client_mask) if mask]
 
 

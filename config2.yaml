@@ -56,7 +56,7 @@ sim_details:
       churn:
         name: "binomial"
         parameters:
-          p: 0.0833
+          p: 0.00833
       plantDist:
         name: "discreteBeta"
         parameters:
