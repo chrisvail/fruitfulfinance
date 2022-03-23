@@ -1,8 +1,8 @@
 ---
-name: "Deterministic"
+name: "customer_uncertainty"
 period: "week"
 steps: 260
-runs: 1
+runs: 100
 sim_details:
   germinationStation:
     germination_costs:
@@ -20,17 +20,20 @@ sim_details:
     active_varieties: 1
   cac:
     cac_low:
-      name: "constant"
+      name: "gaussian"
       parameters:
-        value: 212.53
+        loc: 212.53
+        scale: 20
     cac_med:
-      name: "constant"
+      name: "gaussian"
       parameters:
-        value: 118.40
+        loc: 118.40
+        scale: 15
     cac_high:
-      name: "constant"
+      name: "gaussian"
       parameters:
-        value: 89.97
+        loc: 89.97
+        scale: 10
   activeClients:
     distributions:
       unit:
@@ -46,9 +49,9 @@ sim_details:
         parameters:
           value: 7.5
       churn:
-        name: "timer"
+        name: "binomial"
         parameters:
-          steps: 52
+          p: 0.00833
       plantDist:
         name: "constant"
         parameters:
@@ -63,11 +66,13 @@ sim_details:
       thresholds: [5, 10, 25]
   customerAcquisition:
     lead_generation:
-      name: "constant"
+      name: "skew-norm"
       parameters:
-        value: 20
+        a: -4
+        loc: 20
+        scale: 5
     conversion:
-      name: "constantPercentage"
+      name: "binomial"
       parameters:
         p: 0.07
   build:

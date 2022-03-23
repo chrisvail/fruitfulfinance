@@ -10,6 +10,7 @@ test*.py
 Initial_test_run/
 Initial_test_run2/
 Deterministic/
+*uncertainty*/
 
 # C extensions
 *.so

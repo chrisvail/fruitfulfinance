@@ -1,8 +1,8 @@
 ---
-name: "Deterministic"
+name: "uncertainty_total_base"
 period: "week"
 steps: 260
-runs: 1
+runs: 100
 sim_details:
   germinationStation:
     germination_costs:
@@ -16,43 +16,54 @@ sim_details:
     plant_maturity:
       weeks2mature: 3
       mature_life: 2
-    initial_shelf_counts: [10, 60]
-    active_varieties: 1
+    initial_shelf_counts: [20, 120]
+    active_varieties: 5
   cac:
     cac_low:
-      name: "constant"
+      name: "gaussian"
       parameters:
-        value: 212.53
+        loc: 212.53
+        scale: 20
     cac_med:
-      name: "constant"
+      name: "gaussian"
       parameters:
-        value: 118.40
+        loc: 118.40
+        scale: 15
     cac_high:
-      name: "constant"
+      name: "gaussian"
       parameters:
-        value: 89.97
+        loc: 89.97
+        scale: 10
   activeClients:
     distributions:
       unit:
-        name: "constant"
+        name: "skew-norm"
         parameters:
-          value: 6
+          a: -4
+          loc: 6
+          scale: 2
       subLength:
         name: "constant"
         parameters:
           value: 4
       officePosition:
-        name: "constant"
+        name: "beta"
         parameters:
-          value: 7.5
+          a: 1
+          b: 1
+          loc: 0
+          scale: 10
       churn:
-        name: "timer"
+        name: "binomial"
         parameters:
-          steps: 52
+          p: 0.00833
       plantDist:
-        name: "constant"
+        name: "discreteBeta"
         parameters:
-          value: 0
+          alpha: 1
+          beta: 1
+          # buckets should be the same as active varieties
+          buckets: 5
     plant_request_length: 12
     client_details:
       subscription_price: 40
@@ -63,11 +74,13 @@ sim_details:
       thresholds: [5, 10, 25]
   customerAcquisition:
     lead_generation:
-      name: "constant"
+      name: "skew-norm"
       parameters:
-        value: 20
+        a: -4
+        loc: 20
+        scale: 5
     conversion:
-      name: "constantPercentage"
+      name: "binomial"
       parameters:
         p: 0.07
   build:
@@ -82,16 +95,20 @@ sim_details:
     maintenance_cost: 7.038
   transport:
     hq_position:
-      name: "constant"
+      name: "beta"
       parameters:
-        value: 0
+        a: 1
+        b: 1
+        loc: 0
+        scale: 5
     fuel_cost: 0.22
-    max_clients_serviced: 1
+    max_clients_serviced: 5
   op_cost:
     op_cost_dist:
-      name: constant
+      name: gaussian
       parameters:
-        value: 1750
+        loc: 2000
+        scale: 500
 
 
 

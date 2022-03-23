@@ -9,6 +9,14 @@ from factory import Simulation
 import os
 
 def main():
+
+    files = [
+        "configs/customer_uncertainty.yaml",
+        "configs/location_uncertainty.yaml",
+        "configs/misc_uncertainty.yaml",
+        "configs/total_base.yaml",
+    ]
+
     stream = open("configs\deterministic.yaml", 'r')
     dictionary = yaml.safe_load(stream)
 

@@ -114,6 +114,7 @@ class Simulation:
         self.startup_time["Maintenance"] = perf_counter() - t0
         # Add objects to the simulation clock
         t0 = perf_counter()
+        self.sim_clock.subscribe(self.operations)
         self.sim_clock.subscribe(self.active_clients)
         self.sim_clock.subscribe(self.customer_acquisition)
         self.sim_clock.subscribe(self.revenue)
@@ -161,7 +162,7 @@ if __name__ == "__main__":
     import yaml
     from pprint import pprint
 
-    stream = open("config2.yaml", 'r')
+    stream = open("configs/uncertainty1.yaml", 'r')
     dictionary = yaml.safe_load(stream)
     # pprint(dictionary)
 
@@ -176,15 +177,15 @@ if __name__ == "__main__":
         times.append(perf_counter() - t0)
         print(f"Time: {times[-1]}")
 
-        # print("\tStart up")
-        # startup_total = sum([x for x in sim.startup_time.values()])
-        # for key, value in sim.startup_time.items():
-        #     print(f"\t\t{key}:\t{value}\t{value/startup_total*100:.2f}%")
+        print("\tStart up")
+        startup_total = sum([x for x in sim.startup_time.values()])
+        for key, value in sim.startup_time.items():
+            print(f"\t\t{key}:\t{value}\t{value/startup_total*100:.2f}%")
 
-        # step_total = sum([x for x in sim.sim_clock.get_times().values()]) 
-        # print("\tStepping")
-        # for key, value in sim.sim_clock.get_times().items():
-        #     print(f"\t\t{key}:\t{value}\t{value/step_total*100:.2f}%")
+        step_total = sum([x for x in sim.sim_clock.get_times().values()]) 
+        print("\tStepping")
+        for key, value in sim.sim_clock.get_times().items():
+            print(f"\t\t{key}:\t{value}\t{value/step_total*100:.2f}%")
 
         rev = sim.revenue.total_detailed
         exp = sim.expense.total_detailed
@@ -203,9 +204,9 @@ if __name__ == "__main__":
 
         print(df)
         df.to_csv(f"{dictionary['name']}{i}.csv")
-        df.plot.line(y=["client_count", "active_units"])
-        df.plot.line(y=["client_count", "churned"])
+        # df.plot.line(y=["client_count", "active_units"])
+        # df.plot.line(y=["client_count", "churned"])
 
-        plt.show()
+        # plt.show()
 
     print(sum(times))

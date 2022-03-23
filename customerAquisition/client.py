@@ -54,11 +54,14 @@ class Client:
 
 
         self.client_lifetime += 1
+
+        # Make plant request if time
         if self.client_lifetime % self.plant_request_length == self.plant_request_length - 4:
             self.plant_varieties_requested = self.plant_dist.get_array(size=self.plants_per_unit*self.unit_count)
             self.germination_request.make_request(self.plant_varieties_requested)
             self.plants_requested = self.client_lifetime
         
+        # Update churn based on plant requests
         if self.plants_requested is not None \
            and (self.client_lifetime - self.plants_requested) > Client.expected_request_delay:
 
@@ -74,6 +77,7 @@ class Client:
                 p = max([p, Client.churn_min])
                 self.churn.update_param({"p":p})
 
+        # Make subscription payment
         if self.client_lifetime < self.initial_contract_period and self.client_lifetime % self.sub_length == 0:
             self.revenue.make_payment(
                 name=f"Client{self.id}",
