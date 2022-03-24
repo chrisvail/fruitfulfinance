@@ -1,5 +1,5 @@
 ---
-name: "uncertainty_total_base"
+name: "uncertainty_total_cs1"
 period: "week"
 steps: 260
 runs: 100
@@ -40,7 +40,7 @@ sim_details:
         name: "skew-norm"
         parameters:
           a: -2
-          loc: 6
+          loc: 4
           scale: 2
       subLength:
         name: "constant"
@@ -49,19 +49,19 @@ sim_details:
       officePosition:
         name: "beta"
         parameters:
-          a: 1
-          b: 1
+          a: 5
+          b: 5
           loc: 0
-          scale: 10
+          scale: 30
       churn:
         name: "binomial"
         parameters:
-          p: 0.00833
+          p: 0.0714
       plantDist:
         name: "discreteBeta"
         parameters:
-          alpha: 1
-          beta: 1
+          alpha: 5
+          beta: 2
           # buckets should be the same as active varieties
           buckets: 5
     plant_request_length: 12
@@ -73,11 +73,12 @@ sim_details:
     cac:
       thresholds: [5, 10, 25]
   customerAcquisition:
+    lead_growth: 1.006915
     lead_generation:
       name: "skew-norm"
       parameters:
         a: -2
-        loc: 20
+        loc: 10
         scale: 5
     conversion:
       name: "binomial"
@@ -98,12 +99,12 @@ sim_details:
     hq_position:
       name: "beta"
       parameters:
-        a: 1
-        b: 1
+        a: 5
+        b: 5
         loc: 0
-        scale: 5
+        scale: 15
     fuel_cost: 0.22
-    max_clients_serviced: 5
+    max_clients_serviced: 12
     labour_per_mile: 0.5
   op_cost:
     op_cost_dist:
