@@ -7,10 +7,11 @@ from distributions import Distribution
 
 class Transport:
     
-    def __init__(self, hq_position, fuel_cost, max_clients_serviced) -> None:
+    def __init__(self, hq_position, fuel_cost, max_clients_serviced, labour_per_mile) -> None:
         self.hq_position = Distribution(**hq_position).get_array(size=2)
         self.fuel_cost = fuel_cost
         self.max_clients_serviced = max_clients_serviced
+        self.labour_per_mile = labour_per_mile
         
 
     
@@ -91,7 +92,7 @@ class Transport:
 
                 ax.scatter(
                     x=client_locations[:,0], y=client_locations[:,1], 
-                    s=[client.unit_count for client in chunk],
+                    s=[client.unit_count*20 for client in chunk],
                     c=[np.random.rand(1)[0]]*len(client_locations),
                     alpha=0.5
                 )

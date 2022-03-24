@@ -14,6 +14,7 @@ class Expense:
             "maintenance":0,
             "germination":0,
             "op_cost":0,
+            "capex":0,
             "transactions":0
         }
         self.logger = getLogger(__name__)
@@ -22,14 +23,20 @@ class Expense:
 
 
     def step(self, actions):
+        self.make_record()
+
+    def make_record(self):
         self.record.append(self.payments)
         self.zero_payments()
+
 
 
     def make_payment(self, name, tag, amount, details={}):
         # print(f"\t{tag}\t{name}\t-{amount}")
         self.payments["total"] += amount
         self.payments[tag] += amount
+        if "capex" in name:
+            self.payments["capex"] += amount
         self.payments["transactions"] += 1
         
         self.logger.log(INFO, f'EXPENSE:{{"name":"{name}", "tag":"{tag}", "amount":{amount}, "details":{details}}}')
@@ -43,6 +50,7 @@ class Expense:
             "maintenance":0,
             "germination":0,
             "op_cost":0,
+            "capex":0,
             "transactions":0
         }
 

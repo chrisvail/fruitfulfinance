@@ -4,10 +4,12 @@ from expense import Expense
 
 class BuildUnit:
 
-    def __init__(self, man_cost, mat_cost, build_thresholds, build_q: Queue, install_q: Queue, expense: Expense, phase=1) -> None:
+    def __init__(self, man_cost, mat_cost, build_thresholds, phase_change, build_q: Queue, install_q: Queue, expense: Expense, phase=1) -> None:
         self.manufacture_costs = man_cost
         self.material_costs = mat_cost
         self.thresholds = build_thresholds
+
+        self.phase_change = phase_change
 
         self.build_q = build_q
         self.expense = expense
@@ -54,7 +56,13 @@ class BuildUnit:
         client_list = [x["client"] for x in builds]
         self.install_q.put(client_list)
 
-        self.phase = actions["phase"]
+        if self.phase != actions["phase"]:
+            self.phase = actions["phase"]
+            self.expense.make_payment(
+                "phase capex",
+                "build",
+                amount=self.phase_change
+            )
 
     def get_threshold(self, units):
 

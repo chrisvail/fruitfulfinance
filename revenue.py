@@ -22,8 +22,14 @@ class Revenue:
         self.maintenance_q = maintenance_q
 
     def step(self, actions):
+        self.make_record()
+
+
+    def make_record(self):
         self.record.append(self.payments)
         self.zero_payments()
+
+
 
 
 

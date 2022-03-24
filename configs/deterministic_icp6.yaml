@@ -1,8 +1,8 @@
 ---
-name: "customer_uncertainty"
+name: "deterministic_icp6"
 period: "week"
 steps: 260
-runs: 100
+runs: 1
 sim_details:
   germinationStation:
     germination_costs:
@@ -20,26 +20,23 @@ sim_details:
     active_varieties: 1
   cac:
     cac_low:
-      name: "gaussian"
+      name: "constant"
       parameters:
-        loc: 212.53
-        scale: 20
+        value: 212.53
     cac_med:
-      name: "gaussian"
+      name: "constant"
       parameters:
-        loc: 118.40
-        scale: 15
+        value: 118.40
     cac_high:
-      name: "gaussian"
+      name: "constant"
       parameters:
-        loc: 89.97
-        scale: 10
+        value: 89.97
   activeClients:
     distributions:
       unit:
         name: "constant"
         parameters:
-          value: 6
+          value: 4
       subLength:
         name: "constant"
         parameters:
@@ -49,9 +46,9 @@ sim_details:
         parameters:
           value: 7.5
       churn:
-        name: "binomial"
+        name: "timer"
         parameters:
-          p: 0.00833
+          steps: 13
       plantDist:
         name: "constant"
         parameters:
@@ -61,26 +58,25 @@ sim_details:
       subscription_price: 40
       purchase_price: 500
       plants_per_unit: 30
-      initial_contract_period: 52
+      initial_contract_period: 26
     cac:
       thresholds: [5, 10, 25]
   customerAcquisition:
+    lead_growth: 1.006915
     lead_generation:
-      name: "skew-norm"
+      name: "constant"
       parameters:
-        a: -4
-        loc: 20
-        scale: 5
+        value: 10
     conversion:
-      name: "binomial"
+      name: "constantPercentage"
       parameters:
         p: 0.07
   build:
     man_cost: [[63.53, 47.88, 41.90], 31.76]
     mat_cost: [[203.68, 169.01, 146.58], 105.86]
-    # reman_cost: [[87.10, 48.36, 42.70], 24.70]
     build_thresholds: [10, 20, 50]
     phase: 1
+    phase_change: 20000
   install:
     install_cost: 12.5
   maintenance:
@@ -91,12 +87,14 @@ sim_details:
       parameters:
         value: 0
     fuel_cost: 0.22
-    max_clients_serviced: 1
+    max_clients_serviced: 2
+    labour_per_mile: 0.5
   op_cost:
     op_cost_dist:
       name: constant
       parameters:
         value: 1750
+    upfront_costs: 12000
 
 
 

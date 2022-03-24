@@ -13,10 +13,17 @@ class Constant:
 class ConstantPercentage:
     def __init__(self, p) -> None:
         self.p = p
-
+        self.total_seen = 0
+        self.given = 0
     def rvs(self, size):
-        positives = int(size*self.p)
-        return np.concatenate([np.ones(positives), np.zeros(size - positives)]).astype("int")
+
+        positives = int((self.total_seen + size)*self.p)
+
+        give = positives - self.given
+        self.given = positives
+        self.total_seen += size
+
+        return np.concatenate([np.ones(give), np.zeros(size - give)]).astype("int")
 
 
 class Timer:

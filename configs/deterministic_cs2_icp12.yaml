@@ -1,8 +1,8 @@
 ---
-name: "misc_uncertainty"
+name: "deterministic_cs2_icp12"
 period: "week"
 steps: 260
-runs: 100
+runs: 1
 sim_details:
   germinationStation:
     germination_costs:
@@ -17,28 +17,26 @@ sim_details:
       weeks2mature: 3
       mature_life: 2
     initial_shelf_counts: [10, 60]
-    active_varieties: 5
+    active_varieties: 1
   cac:
     cac_low:
       name: "constant"
       parameters:
-        value: 212.53
+        value: 743.86
     cac_med:
       name: "constant"
       parameters:
-        value: 118.40
+        value: 414.40
     cac_high:
       name: "constant"
       parameters:
-        value: 89.97
+        value: 314.90
   activeClients:
     distributions:
       unit:
-        name: "skew-norm"
+        name: "constant"
         parameters:
-          a: -4
-          loc: 6
-          scale: 2
+          value: 20
       subLength:
         name: "constant"
         parameters:
@@ -46,18 +44,15 @@ sim_details:
       officePosition:
         name: "constant"
         parameters:
-          value: 7.5
+          value: 15
       churn:
         name: "timer"
         parameters:
-          steps: 52
+          steps: 39
       plantDist:
-        name: "discreteBeta"
+        name: "constant"
         parameters:
-          alpha: 1
-          beta: 1
-          # buckets should be the same as active varieties
-          buckets: 5
+          value: 0
     plant_request_length: 12
     client_details:
       subscription_price: 40
@@ -67,10 +62,11 @@ sim_details:
     cac:
       thresholds: [5, 10, 25]
   customerAcquisition:
+    lead_growth: 1.005097
     lead_generation:
       name: "constant"
       parameters:
-        value: 20
+        value: 4
     conversion:
       name: "constantPercentage"
       parameters:
@@ -78,9 +74,9 @@ sim_details:
   build:
     man_cost: [[63.53, 47.88, 41.90], 31.76]
     mat_cost: [[203.68, 169.01, 146.58], 105.86]
-    # reman_cost: [[87.10, 48.36, 42.70], 24.70]
     build_thresholds: [10, 20, 50]
     phase: 1
+    phase_change: 20000
   install:
     install_cost: 12.5
   maintenance:
@@ -91,13 +87,14 @@ sim_details:
       parameters:
         value: 0
     fuel_cost: 0.22
-    max_clients_serviced: 1
+    max_clients_serviced: 2
+    labour_per_mile: 0.5
   op_cost:
     op_cost_dist:
-      name: gaussian
+      name: constant
       parameters:
-        loc: 2000
-        scale: 500
+        value: 1750
+    upfront_costs: 12000
 
 
 

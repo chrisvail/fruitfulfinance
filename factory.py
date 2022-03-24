@@ -124,9 +124,13 @@ class Simulation:
         self.sim_clock.subscribe(self.germination_station)
         self.sim_clock.subscribe(self.expense)
 
+        self.expense.make_record()
+        self.revenue.make_record()
+
         self.startup_time["Subscription"] = perf_counter() - t0
 
     def run(self):
+        self.make_record()
         for i in range(self.steps):
             actions = self.action_function(self, i)         
             self.sim_clock.step(actions)

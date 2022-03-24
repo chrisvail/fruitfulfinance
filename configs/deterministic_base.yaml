@@ -1,8 +1,8 @@
 ---
-name: "Initial_test_run"
+name: "deterministic_base"
 period: "week"
 steps: 260
-runs: 1000
+runs: 1
 sim_details:
   germinationStation:
     germination_costs:
@@ -16,94 +16,85 @@ sim_details:
     plant_maturity:
       weeks2mature: 3
       mature_life: 2
-    initial_shelf_counts: [20, 120]
-    active_varieties: 5
+    initial_shelf_counts: [10, 60]
+    active_varieties: 1
   cac:
     cac_low:
-      name: "gaussian"
+      name: "constant"
       parameters:
-        loc: 212.53
-        scale: 20
+        value: 212.53
     cac_med:
-      name: "gaussian"
+      name: "constant"
       parameters:
-        loc: 118.40
-        scale: 15
+        value: 118.40
     cac_high:
-      name: "gaussian"
+      name: "constant"
       parameters:
-        loc: 89.97
-        scale: 10
+        value: 89.97
   activeClients:
     distributions:
       unit:
-        name: "skew-norm"
+        name: "constant"
         parameters:
-          a: -4
-          loc: 6
-          scale: 2
+          value: 4
       subLength:
         name: "constant"
         parameters:
           value: 4
       officePosition:
-        name: "beta"
+        name: "constant"
         parameters:
-          a: 1
-          b: 1
-          loc: 0
-          scale: 10
+          value: 7.5
       churn:
-        name: "binomial"
+        name: "timer"
         parameters:
-          p: 0.00833
+          steps: 13
       plantDist:
-        name: "discreteBeta"
+        name: "constant"
         parameters:
-          alpha: 1
-          beta: 1
-          # buckets should be the same as active varieties
-          buckets: 5
+          value: 0
     plant_request_length: 12
     client_details:
       subscription_price: 40
       purchase_price: 500
       plants_per_unit: 30
-      initial_contract_period: 52
+      initial_contract_period: 0
     cac:
       thresholds: [5, 10, 25]
   customerAcquisition:
+    lead_growth: 1.006915
     lead_generation:
-      name: "skew-norm"
+      name: "constant"
       parameters:
-        a: -4
-        loc: 20
-        scale: 5
+        value: 10
     conversion:
-      name: "binomial"
+      name: "constantPercentage"
       parameters:
         p: 0.07
   build:
     man_cost: [[63.53, 47.88, 41.90], 31.76]
     mat_cost: [[203.68, 169.01, 146.58], 105.86]
-    # reman_cost: [[87.10, 48.36, 42.70], 24.70]
     build_thresholds: [10, 20, 50]
     phase: 1
+    phase_change: 20000
   install:
     install_cost: 12.5
   maintenance:
     maintenance_cost: 7.038
   transport:
     hq_position:
-      name: "beta"
+      name: "constant"
       parameters:
-        a: 1
-        b: 1
-        loc: 0
-        scale: 5
+        value: 0
     fuel_cost: 0.22
-    max_clients_serviced: 5
-
+    max_clients_serviced: 2
+    labour_per_mile: 0.5
+  op_cost:
+    op_cost_dist:
+      name: constant
+      parameters:
+        value: 1750
+    upfront_costs: 12000
 
 
 

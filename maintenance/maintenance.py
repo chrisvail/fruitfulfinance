@@ -45,7 +45,12 @@ class Maintenance:
         # Maintenance.timing["queueDelayed"]["count"] += 1
 
         # t0 = perf_counter()
-        self.transport.make_combined_jouney(self.client_list, plot_name=action["plot_maintenance"])
+        transport_cost = self.transport.make_combined_jouney(self.client_list, plot_name=action["plot_maintenance"])
+        self.expense.make_payment(
+            name="Transport",
+            tag="maintenance",
+            amount = transport_cost
+        )
         # Maintenance.timing["transport"]["time"] += perf_counter() - t0
         # Maintenance.timing["transport"]["count"] += 1
         
