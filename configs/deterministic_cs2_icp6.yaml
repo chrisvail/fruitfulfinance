@@ -22,15 +22,15 @@ sim_details:
     cac_low:
       name: "constant"
       parameters:
-        value: 743.86
+        value: 1487.72
     cac_med:
       name: "constant"
       parameters:
-        value: 414.40
+        value: 828.8
     cac_high:
       name: "constant"
       parameters:
-        value: 314.90
+        value: 629.8
   activeClients:
     distributions:
       unit:
@@ -66,7 +66,7 @@ sim_details:
     lead_generation:
       name: "constant"
       parameters:
-        value: 4
+        value: 3
     conversion:
       name: "constantPercentage"
       parameters:
