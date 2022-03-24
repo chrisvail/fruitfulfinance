@@ -17,7 +17,7 @@ sim_details:
       weeks2mature: 3
       mature_life: 2
     initial_shelf_counts: [10, 60]
-    active_varieties: 5
+    active_varieties: 1
   cac:
     cac_low:
       name: "gaussian"
@@ -60,8 +60,8 @@ sim_details:
       plantDist:
         name: "discreteBeta"
         parameters:
-          alpha: 5
-          beta: 2
+          alpha: 1
+          beta: 1
           # buckets should be the same as active varieties
           buckets: 5
     plant_request_length: 12

@@ -19,7 +19,7 @@ def main():
     ]
 
     for file in tuple(os.walk("./configs"))[0][2]:
-        if "deterministic" not in file: continue
+        if "uncertainty" not in file: continue
         stream = open("configs/" + file, 'r')
         dictionary = yaml.safe_load(stream)
 

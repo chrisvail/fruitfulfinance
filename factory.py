@@ -148,6 +148,7 @@ class Simulation:
             "expenses_maintenance": self.expense.record[-1]["maintenance"],
             "expenses_germination": self.expense.record[-1]["germination"],
             "expenses_op_cost": self.expense.record[-1]["op_cost"],
+            "expenses_capex": self.expense.record[-1]["capex"],
             "expenses_transactions": self.expense.record[-1]["transactions"],
             "revenue_total": self.revenue.record[-1]["total"],
             "revenue_sale": self.revenue.record[-1]["sale"],
