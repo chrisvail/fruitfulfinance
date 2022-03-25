@@ -2,7 +2,7 @@
 name: "uncertainty_cs2"
 period: "week"
 steps: 260
-runs: 20
+runs: 2000
 sim_details:
   germinationStation:
     germination_costs:

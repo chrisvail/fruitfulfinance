@@ -34,7 +34,7 @@ def main():
         # tasks = ((dictionary, i) for i in range(dictionary["runs"]))
         results_total = None
         t0 = perf_counter()
-        print(f"Starting to run: {dictionary['name']}")
+        print(f"Starting to run: {dictionary['name']} for {dictionary['runs']} runs")
         for i in range(0, dictionary["runs"], 20):
             tasks = ((dictionary, i) for i in range(i, i+20))
 
