@@ -30,7 +30,7 @@ class Simulation:
         self.record = []
 
         if action_function is None:
-            self.action_function = lambda self, step: {"phase":1,"add_new_shelves":0,"plot_maintenance":None} 
+            self.action_function = lambda self, step: {"phase":1,"add_new_shelves":0,"plot_maintenance":None, "customer_change":None} 
         else:
             self.action_function = action_function
 
