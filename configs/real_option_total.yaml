@@ -1,5 +1,5 @@
 ---
-name: "real_option_total"
+name: "real_option_customer"
 period: "week"
 steps: 260
 runs: 2000
@@ -39,8 +39,8 @@ sim_details:
       unit:
         name: "gaussian"
         parameters:
-          loc: 4
-          scale: 1
+          loc: 6
+          scale: 2
       subLength:
         name: "constant"
         parameters:
@@ -55,7 +55,7 @@ sim_details:
       churn:
         name: "binomial"
         parameters:
-          p: 0.015
+          p: 0.01
       plantDist:
         name: "discreteBeta"
         parameters:
@@ -76,14 +76,14 @@ sim_details:
     lead_generation:
       name: "poisson"
       parameters:
-        mu: 5
+        mu: 12
     conversion:
       name: "binomial"
       parameters:
         p: 0.07
   build:
-    man_cost: [[63.53, 47.88, 41.90], 31.76]
-    mat_cost: [[203.68, 169.01, 146.58], 105.86]
+    man_cost: [[63.53, 47.88, 41.90], 14.76]
+    mat_cost: [[203.68, 169.01, 146.58], 65.86]
     # reman_cost: [[87.10, 48.36, 42.70], 24.70]
     build_thresholds: [10, 20, 50]
     phase: 1
@@ -130,7 +130,7 @@ sim_details:
     unit:
       name: "gaussian"
       parameters:
-        loc: 20
+        loc: 25
         scale: 7
     churn:
       name: "binomial"
@@ -139,11 +139,11 @@ sim_details:
     lead_generation:
       name: "poisson"
       parameters:
-        mu: 2
+        mu: 5
     lead_growth: 1.006209
-    MRR_threshold: 8000
+    MRR_threshold: 15000
   build_change:
-    unit_threshold: 10
+    unit_threshold: 15
     rolling_average: 8
 
 

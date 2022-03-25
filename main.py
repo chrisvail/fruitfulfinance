@@ -23,7 +23,7 @@ def main():
     for file in tuple(os.walk("./configs"))[0][2]:
         Client.client_churned = 0
         Client.client_count = 0
-        if "uncertainty" not in file and "real_option" not in file: continue
+        if "uncertain1ty" not in file and "real_option" not in file: continue
         stream = open("configs/" + file, 'r')
         dictionary = yaml.safe_load(stream)
 
@@ -58,27 +58,35 @@ def main2():
 
     file = "uncertainty_cs1.yaml"
 
-    stream = open("configs/" + file, 'r')
+    Client.client_churned = 0
+    Client.client_count = 0
+    stream = open("configs_old/" + file, 'r')
     dictionary = yaml.safe_load(stream)
 
     path = os.path.abspath(".")
     if not os.path.isdir(f"{dictionary['name']}"):
         os.mkdir(path + f"\\{dictionary['name']}")
 
-    print(f"Name: {dictionary['name']}")
-    print(f"Runs: {dictionary['runs']}")
-
-    tasks = tuple((dictionary, i) for i in range(dictionary["runs"]))
-    print(f"Task Length: {len(tasks)}")
+    # tasks = ((dictionary, i) for i in range(dictionary["runs"]))
+    results_total = None
     t0 = perf_counter()
-    with mp.Pool(processes=mp.cpu_count()) as pool:
-        results = pool.starmap(worker, tasks)
+    print(f"Starting to run: {dictionary['name']} for {dictionary['runs']} runs")
+    for i in range(0, dictionary["runs"], 20):
+        tasks = ((dictionary, i) for i in range(i, i+20))
 
-    print(f"Completed {dictionary['runs']} runs in {perf_counter() - t0} seconds")
-    results = [x.to_numpy() for x in results]
-    results = np.stack(results, axis=-1)
-    np.save(f"{dictionary['name']}/{dictionary['name']}_all.npy", results)
-    np.save(f"Results/{dictionary['name']}_all.npy", results)
+        with mp.Pool(processes=mp.cpu_count()) as pool:
+            results = pool.starmap(worker, tasks)
+
+        print(f"\tCompleted {i+20} runs in {perf_counter() - t0} seconds")
+        results = [x.to_numpy() for x in results]
+        results = np.stack(results, axis=-1)
+
+        if results_total is None:
+            results_total = results
+        else:
+            results_total = np.concatenate((results_total, results), axis=2)
+    np.save(f"{dictionary['name']}/{dictionary['name']}_all.npy", results_total)
+    np.save(f"Results/{dictionary['name']}_all.npy", results_total)
 
 
 def worker(config, run_no):
@@ -93,7 +101,7 @@ def worker(config, run_no):
     sim = Simulation(config["sim_details"], config["steps"], action_function)
     sim.run()
     df = pd.DataFrame(sim.record)
-    # df.to_csv(f"{config['name']}/{config['name']}_{run_no}.csv")
+    df.to_csv(f"{config['name']}/{config['name']}_{run_no}.csv")
     return df
 
 

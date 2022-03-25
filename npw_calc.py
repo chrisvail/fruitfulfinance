@@ -8,7 +8,7 @@ MARR = (1.4**0.25) - 1
 
 stats = pd.DataFrame(columns=['NPV','IRR','CAPEX','System Hours','MRR'])
 
-data = np.load("data/uncertainty_cs2_all.npy")
+data = np.load("Results/uncertainty_cs1_all.npy")
 # data = np.load("data/uncertainty_office_loc_all.npy")
 # data = np.load("data/deterministic_cs2_icp12_all.npy")
 
@@ -33,12 +33,12 @@ for x in range(data.shape[2]):
     new_stats = pd.DataFrame([[cash_flows['PW'].sum(), irr, capex, df['run_hours'].sum(), mrr]], columns=['NPV','IRR','CAPEX','System Hours', 'MRR'])
     stats = pd.concat([stats, new_stats], ignore_index=True)
 
-    print("\nRUN STATISTICS")
-    print(f"\tCAPEX: £{capex:,.2f}")
-    print(f"\tNPV: £{(cash_flows['PW'].sum()):,.2f}")
-    print(f"\tIRR: {irr*100:.2f}% per quarter, {((1+irr)**4 - 1)*100:.2f}% annually")
-    print(f"\tTotal System Activity: {df['run_hours'].sum():,.0f} hours")
-    print(f"\tMonthly Recurring Revenue: £{mrr:,.2f}")
+    # print("\nRUN STATISTICS")
+    # print(f"\tCAPEX: £{capex:,.2f}")
+    # print(f"\tNPV: £{(cash_flows['PW'].sum()):,.2f}")
+    # print(f"\tIRR: {irr*100:.2f}% per quarter, {((1+irr)**4 - 1)*100:.2f}% annually")
+    # print(f"\tTotal System Activity: {df['run_hours'].sum():,.0f} hours")
+    # print(f"\tMonthly Recurring Revenue: £{mrr:,.2f}")
 
 
 print("\n-------\nSIM STATISTICS")
