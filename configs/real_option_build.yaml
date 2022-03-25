@@ -1,0 +1,152 @@
+---
+name: "real_option_build"
+period: "week"
+steps: 260
+runs: 40
+sim_details:
+  germinationStation:
+    germination_costs:
+      cost_per_seed: 0.11471
+      seeds_per_shelf: 400
+      new_shelf_capex: 108.6
+      shelf_running_cost: 1.03488
+      new_shelving_unit_capex: 55
+      shelves_per_shelving_unit: 6
+      extra_production: 3.5
+    plant_maturity:
+      weeks2mature: 3
+      mature_life: 2
+    initial_shelf_counts: [10, 60]
+    active_varieties: 5
+  cac:
+    cac_low:
+      name: "gaussian"
+      parameters:
+        loc: 1487.72
+        scale: 200
+    cac_med:
+      name: "gaussian"
+      parameters:
+        loc: 828.8
+        scale: 150
+    cac_high:
+      name: "gaussian"
+      parameters:
+        loc: 629.8
+        scale: 100
+  activeClients:
+    distributions:
+      unit:
+        name: "gaussian"
+        parameters:
+          loc: 20
+          scale: 7
+      subLength:
+        name: "constant"
+        parameters:
+          value: 4
+      officePosition:
+        name: "beta"
+        parameters:
+          a: 5
+          b: 5
+          loc: 0
+          scale: 100
+      churn:
+        name: "binomial"
+        parameters:
+          p: 0.00407
+      plantDist:
+        name: "discreteBeta"
+        parameters:
+          alpha: 1
+          beta: 1
+          # buckets should be the same as active varieties
+          buckets: 5
+    plant_request_length: 12
+    client_details:
+      subscription_price: 40
+      purchase_price: 500
+      plants_per_unit: 30
+      initial_contract_period: 52
+    cac:
+      thresholds: [5, 10, 25]
+  customerAcquisition:
+    lead_growth: 1.006209
+    lead_generation:
+      name: "poisson"
+      parameters:
+        mu: 2
+    conversion:
+      name: "binomial"
+      parameters:
+        p: 0.07
+  build:
+    man_cost: [[63.53, 47.88, 41.90], 31.76]
+    mat_cost: [[203.68, 169.01, 146.58], 105.86]
+    # reman_cost: [[87.10, 48.36, 42.70], 24.70]
+    build_thresholds: [10, 20, 50]
+    phase: 1
+    phase_change: 20000
+  install:
+    install_cost: 12.5
+  maintenance:
+    maintenance_cost: 7.038
+  transport:
+    hq_position:
+      name: "beta"
+      parameters:
+        a: 5
+        b: 5
+        loc: 0
+        scale: 100
+    fuel_cost: 0.22
+    max_clients_serviced: 5
+    labour_per_mile: 0.5
+  op_cost:
+    op_cost_dist:
+      name: gaussian
+      parameters:
+        loc: 2000
+        scale: 500
+    upfront_costs: 12000
+  customer_change:
+    cac:
+      cac_low:
+        name: "gaussian"
+        parameters:
+          loc: 1487.72
+          scale: 200
+      cac_med:
+        name: "gaussian"
+        parameters:
+          loc: 828.8
+          scale: 150
+      cac_high:
+        name: "gaussian"
+        parameters:
+          loc: 629.8
+          scale: 100
+    unit:
+      name: "gaussian"
+      parameters:
+        loc: 20
+        scale: 7
+    churn:
+      name: "binomial"
+      parameters:
+        p: 0.00407
+    lead_generation:
+      name: "poisson"
+      parameters:
+        mu: 2
+    lead_growth: 1.006209
+    MRR_threshold: 800000000
+  build_change:
+    unit_threshold: 10
+    rolling_average: 8
+
+
+
+
+
