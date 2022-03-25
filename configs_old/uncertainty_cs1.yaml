@@ -1,8 +1,8 @@
 ---
-name: "uncertainty_total_cs1"
+name: "uncertainty_cs1"
 period: "week"
 steps: 260
-runs: 100
+runs: 10
 sim_details:
   germinationStation:
     germination_costs:
@@ -37,33 +37,26 @@ sim_details:
   activeClients:
     distributions:
       unit:
-        name: "skew-norm"
+        name: "gaussian"
         parameters:
-          a: -2
           loc: 4
-          scale: 2
+          scale: 1
       subLength:
         name: "constant"
         parameters:
           value: 4
       officePosition:
-        name: "beta"
+        name: "constant"
         parameters:
-          a: 5
-          b: 5
-          loc: 0
-          scale: 30
+          value: 7.5
       churn:
         name: "binomial"
         parameters:
-          p: 0.0714
+          p: 0.015
       plantDist:
-        name: "discreteBeta"
+        name: "constant"
         parameters:
-          alpha: 1
-          beta: 1
-          # buckets should be the same as active varieties
-          buckets: 5
+          value: 0
     plant_request_length: 12
     client_details:
       subscription_price: 40
@@ -75,11 +68,9 @@ sim_details:
   customerAcquisition:
     lead_growth: 1.006915
     lead_generation:
-      name: "skew-norm"
+      name: "poisson"
       parameters:
-        a: -2
-        loc: 10
-        scale: 5
+        mu: 5
     conversion:
       name: "binomial"
       parameters:
@@ -97,12 +88,9 @@ sim_details:
     maintenance_cost: 7.038
   transport:
     hq_position:
-      name: "beta"
+      name: "constant"
       parameters:
-        a: 5
-        b: 5
-        loc: 0
-        scale: 15
+        value: 0
     fuel_cost: 0.22
     max_clients_serviced: 12
     labour_per_mile: 0.5
