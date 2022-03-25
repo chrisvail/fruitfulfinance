@@ -18,6 +18,23 @@ class CustomerAcquisition:
         
         # actions_rel = actions["marketing"]
 
+        if actions["customer_change"] is not None:
+            details = actions["customer_change"]
+            steps = details["steps"]
+            self.lead_growth = details["lead_growth"]
+            new_mean = details["lead_growth"]**steps
+            new_lead_gen = details["lead_generation"]
+
+            if new_lead_gen["name"] == "constant":
+                new_lead_gen["parameters"]["value"] = new_mean
+            elif new_lead_gen["name"] == "poisson":
+                new_lead_gen["parameters"]["mu"] = new_mean
+            else:
+                new_lead_gen["parameters"]["loc"] = new_mean
+            self.lead_generation = Distribution(**new_lead_gen)
+
+
+
         if self.interested_clients[0] > 0:
             converted_clients = np.sum(self.conversion.get_array(size=int(self.interested_clients.pop(0))))
             self.active_clients.add_clients(converted_clients)
@@ -31,6 +48,9 @@ class CustomerAcquisition:
         if self.lead_generation.name == "constant":
             params = self.lead_generation.parameters
             params["value"] *= self.lead_growth
+        elif self.lead_generation.name == "poisson":
+            params = self.lead_generation.parameters
+            params["mu"] *= self.lead_growth
         else:
             params = self.lead_generation.parameters
             params["loc"] *= self.lead_growth

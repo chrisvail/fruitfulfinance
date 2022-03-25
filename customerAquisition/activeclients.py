@@ -43,6 +43,12 @@ class ActiveClients:
     def step(self, actions):
         # Could log which clients are getting removed / what theyre all doing
         # Prune active clients
+        if actions["customer_change"] is not None:
+            details = actions["customer_change"]
+            self.churn_base = details["churn"]
+            self.cac["values"] = details["cac"]
+            self.unit_distribution_dist = Distribution(**details["unit"])
+
         client_mask = []
         for client in self.clients:
             if client.step_subscription() == "cancelled":
@@ -88,3 +94,15 @@ class ActiveClients:
                 continue
             else:
                 return self.cac["values"][i]
+        return self.cac["values"][-1]
+
+    @property
+    def active_units(self):
+        return sum([x.unit_count for x in self.clients])
+
+    @property
+    def subscription_price(self):
+        return self.client_details["subscription_price"]
+    @property
+    def purchase_price(self):
+        return self.client_details["purchase_price"]

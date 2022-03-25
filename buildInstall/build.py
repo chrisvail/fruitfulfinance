@@ -35,7 +35,7 @@ class BuildUnit:
         elif self.phase == 1:
             curr_threshold = self.get_threshold(unit_total)
             
-            manufacture_total =unit_total*self.manufacture_costs[0][curr_threshold]
+            manufacture_total = unit_total*self.manufacture_costs[0][curr_threshold]
             materials_total = unit_total*self.material_costs[0][curr_threshold]
 
         # Expense materials and manufacture separately for record purposes
@@ -71,4 +71,5 @@ class BuildUnit:
                 continue
             else:
                 return i
+        return -1
             
